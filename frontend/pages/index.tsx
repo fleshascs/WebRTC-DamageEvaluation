@@ -1,0 +1,46 @@
+import Head from "next/head";
+import Layout, { siteTitle } from "../components/layout";
+import utilStyles from "../styles/utils.module.css";
+import { getSortedPostsData } from "../lib/posts";
+import Link from "next/link";
+import Date from "../components/date";
+import { List, ListDivider, ListItem } from "../components/List";
+import { PWAButton } from "../components/PWAButton";
+import { useEffect, useRef } from "react";
+import { TopBar } from "../components/TopBar";
+import { GoogleButton } from "../components/GoogleButton";
+import homeStyles from "../styles/home.module.css";
+import classnames from "classnames";
+
+export default function Home({ allPostsData }) {
+  return (
+    <Layout>
+      <Head>
+        <title>{siteTitle}</title>
+      </Head>
+      <TopBar title="home page" />
+      <div className={classnames(utilStyles.container, utilStyles.center)}>
+        <img src="/images/sssss_iphone12black_portrait.png" width="150" />
+        <div className={utilStyles.center}>
+          <div className={homeStyles.loginButtons}>
+            <Link href={`/api/auth/google`}>
+              <GoogleButton onClick={() => {}}>
+                Sign in with Google
+              </GoogleButton>
+            </Link>
+            <PWAButton />
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData();
+  return {
+    props: {
+      allPostsData,
+    },
+  };
+}

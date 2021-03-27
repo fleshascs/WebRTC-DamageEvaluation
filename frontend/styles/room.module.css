@@ -1,0 +1,42 @@
+.videoContainer {
+  background: #000;
+  flex: 1;
+  height: 16rem;
+}
+.button {
+  background: #c5c6cc !important;
+}
+.buttonsContainer {
+  display: flex;
+  justify-content: space-around;
+}
+@media (min-width: 600px) {
+  .buttonsContainer {
+    justify-content: flex-start;
+  }
+  .buttonsContainer > .button {
+    margin-right: 3rem;
+  }
+}
+.videosContainer {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 5px;
+}
+.videoThumbnail {
+  flex-shrink: 0;
+  width: 100px;
+  height: 60px;
+  background: #000;
+  margin-left: 5px;
+}
+.attachment {
+  width: 6rem;
+  height: 6rem;
+  background: #000;
+  margin: 5px;
+}
+.attachmentsContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
