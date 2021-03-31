@@ -3,7 +3,7 @@ import styles from "./button.module.css";
 import classnames from "classnames";
 
 interface ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   children: ReactChild;
   className?: string;
 }

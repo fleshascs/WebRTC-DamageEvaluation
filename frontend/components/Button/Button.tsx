@@ -3,18 +3,17 @@ import styles from "./button.module.css";
 import classnames from "classnames";
 
 interface ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   children: ReactChild;
   className?: string;
+  component?: string;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {
-  return (
-    <button
-      className={classnames(styles.button, props.className)}
-      onClick={props.onClick}
-    >
-      {props.children}
-    </button>
+  const { component = "button", className, children, onClick } = props;
+  return React.createElement(
+    component,
+    { className: classnames(styles.button, className), onClick },
+    children
   );
 };

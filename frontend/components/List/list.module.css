@@ -63,13 +63,13 @@
   }
 }
 
-.joinButton {
-  border: 1px solid #0070f3;
-  border-radius: 7px;
-  font-size: 0.8em;
-  padding: 5px 11px;
+.titleContainer {
+  display: flex;
+  align-items: center;
 }
 
-.joinButton:hover {
-  text-decoration: none;
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

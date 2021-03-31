@@ -1,14 +1,22 @@
 import Layout from "../../components/layout";
 import Head from "next/head";
-import Date from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 import { TopBar } from "../../components/TopBar";
 import { Video } from "../../components/Video";
 import roomStyles from "../../styles/room.module.css";
 import { Button } from "../../components/Button";
 import classnames from "classnames";
+import { useRoom } from "../../components/room/hooks";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Room: React.FC = () => {
+  const router = useRouter();
+  const roomId = router.query.id;
+  const [room, isLoading, failed] = useRoom(parseInt(roomId as string));
+  console.log("room", room);
+  console.log("roomId", roomId);
+
   return (
     <Layout>
       <Head>
@@ -19,7 +27,9 @@ const Room: React.FC = () => {
         <div className={roomStyles.videoContainer}>
           <Video />
         </div>
-
+        {!room ? "no room data" : null}
+        {isLoading ? "isLoading" : null}
+        {failed ? "failed" : null}
         <div className={roomStyles.videosContainer}>
           <div className={roomStyles.videoThumbnail}>
             <Video />
@@ -61,6 +71,11 @@ const Room: React.FC = () => {
           <Button onClick={() => {}} className={roomStyles.button}>
             <img src="/icons/videocam-black-18dp.svg" alt="record" />
           </Button>
+          <Link href={`/room/${roomId}/settings`}>
+            <Button component="div" className={roomStyles.button}>
+              <img src="/icons/manage_accounts-24px.svg" alt="record" />
+            </Button>
+          </Link>
         </div>
 
         <div className={roomStyles.attachmentsContainer}>

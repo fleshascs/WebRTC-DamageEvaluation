@@ -18,15 +18,13 @@ export default function Home({ allPostsData }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <TopBar title="home page" />
+      <TopBar backButton={false} title="home page" />
       <div className={classnames(utilStyles.container, utilStyles.center)}>
         <img src="/images/sssss_iphone12black_portrait.png" width="150" />
         <div className={utilStyles.center}>
           <div className={homeStyles.loginButtons}>
-            <Link href={`/api/auth/google`}>
-              <GoogleButton onClick={() => {}}>
-                Sign in with Google
-              </GoogleButton>
+            <Link href={`/login`}>
+              <GoogleButton>Sign in with Google</GoogleButton>
             </Link>
             <PWAButton />
           </div>

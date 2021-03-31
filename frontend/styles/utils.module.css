@@ -57,6 +57,18 @@
   align-items: center;
 }
 
+.link {
+  border: 1px solid #0070f3;
+  color: #0070f3;
+  border-radius: 7px;
+  font-size: 0.8em;
+  padding: 5px 11px;
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
 .p1 {
   padding: 1rem;
 }
@@ -77,4 +89,15 @@
   .container {
     max-width: 960px;
   }
+}
+
+.input {
+  padding: 14px;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.footerText {
+  color: #8a8686;
+  font-size: 0.9em;
 }

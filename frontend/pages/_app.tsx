@@ -1,7 +1,13 @@
 import Head from "next/head";
 import "../styles/global.css";
+import { useEffect } from "react";
+import { accountService } from "../services";
 
 export default function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    accountService.refreshToken();
+  }, []);
+
   return (
     <>
       <Head>

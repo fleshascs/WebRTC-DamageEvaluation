@@ -1,22 +1,39 @@
 import styles from "./topbar.module.css";
 import utilStyles from "../../styles/utils.module.css";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { accountService } from "../../services";
+import { useState, useEffect } from "react";
+import { useUser } from "../auth/hooks";
 
 interface TopBarProps {
   title: string;
+  backButton?: boolean;
 }
 
 export const TopBar: React.FC<TopBarProps> = (props) => {
+  const { title, backButton = true } = props;
   const router = useRouter();
+
+  const user = useUser();
+
   return (
     <div className={styles.container}>
-      <div onClick={router.back}>
-        <BackIcon />
-      </div>
-      <div className={utilStyles.ml2}>{props.title}</div>
+      {backButton ? (
+        <div onClick={router.back}>
+          <BackIcon />
+        </div>
+      ) : null}
+      <div className={utilStyles.ml2}>{title}</div>
+      {user ? (
+        <a onClick={accountService.logout} className={styles.logout}>
+          Logout
+        </a>
+      ) : null}
     </div>
   );
 };
+
 const BackIcon = () => {
   return (
     <svg

@@ -1,9 +1,23 @@
 const withPWA = require("next-pwa");
 const runtimeCaching = require("next-pwa/cache");
 
-module.exports = withPWA({
+// module.exports = withPWA({
+//   pwa: {
+//     dest: "public",
+//     runtimeCaching,
+//   },
+//   publicRuntimeConfig: {
+//     // Will be available on both server and client
+//     apiUrl: "http://localhost:4000",
+//   },
+// });
+module.exports = {
   pwa: {
     dest: "public",
     runtimeCaching,
   },
-});
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    apiUrl: "http://localhost:4000",
+  },
+};
