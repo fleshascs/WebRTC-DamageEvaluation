@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import classnames from "classnames";
 import * as Yup from "yup";
 import Link from "next/link";
 import Head from "next/head";
@@ -7,6 +8,12 @@ import Layout from "../../components/layout";
 import { TopBar } from "../../components/TopBar";
 import { roomService } from "../../services";
 import { useRouter } from "next/router";
+import utilStyles from "../../styles/utils.module.css";
+
+interface CreateRoomFields {
+  roomName: string;
+  scheduledFor: string;
+}
 
 const CreateRoom: React.FC = () => {
   const router = useRouter();
@@ -21,17 +28,20 @@ const CreateRoom: React.FC = () => {
     scheduledFor: Yup.string().required("date is required"),
   });
 
-  function onSubmit(fields, { setStatus, setSubmitting }) {
+  function onSubmit(fields: CreateRoomFields, { setStatus, setSubmitting }) {
     setStatus();
     fields.scheduledFor = new Date(fields.scheduledFor).toUTCString();
     console.log("fields", fields);
     roomService
       .create(fields)
-      .then(() => {
+      .then((room) => {
         setShowVerificationMessage(true);
         console.log(
           ' "Registration successful, please check your email for verification instructions"'
         );
+        console.log("room", room);
+
+        router.push(`/room/${room.id}/addParticipant`);
       })
       .catch((error) => {
         setSubmitting(false);
@@ -45,74 +55,75 @@ const CreateRoom: React.FC = () => {
         <title>Create room</title>
       </Head>
       <TopBar title="Create room" />
-      {showVerificationMessage ? (
-        <div>Room crated successfully</div>
-      ) : (
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {({ errors, touched, isSubmitting }) => (
-            <Form>
-              <h3 className="card-header">Create room</h3>
-              <div className="card-body">
-                <div className="form-row">
-                  <div className="form-group col-5">
-                    <label>Room name</label>
-                    <Field
-                      name="roomName"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.roomName && touched.roomName
-                          ? " is-invalid"
-                          : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="roomName"
-                      component="div"
-                      className="invalid-feedback"
-                    />
+      <div className={classnames(utilStyles.p1, utilStyles.container)}>
+        {showVerificationMessage ? (
+          <div>Room crated successfully</div>
+        ) : (
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({ errors, touched, isSubmitting }) => (
+              <Form>
+                <div className="card-body">
+                  <div className="form-row">
+                    <div className="form-group col-5">
+                      <label>Room name</label>
+                      <Field
+                        name="roomName"
+                        type="text"
+                        className={classnames(
+                          utilStyles.input,
+                          errors.roomName && touched.roomName
+                            ? " is-invalid"
+                            : ""
+                        )}
+                      />
+                      <ErrorMessage
+                        name="roomName"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
+                    <div className="form-group col-5">
+                      <label>Scheduled for</label>
+                      <Field
+                        name="scheduledFor"
+                        type="datetime-local"
+                        className={classnames(
+                          utilStyles.input,
+                          errors.scheduledFor && touched.scheduledFor
+                            ? " is-invalid"
+                            : ""
+                        )}
+                      />
+                      <ErrorMessage
+                        name="scheduledFor"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
                   </div>
-                  <div className="form-group col-5">
-                    <label>Scheduled for</label>
-                    <Field
-                      name="scheduledFor"
-                      type="datetime-local"
-                      className={
-                        "form-control" +
-                        (errors.scheduledFor && touched.scheduledFor
-                          ? " is-invalid"
-                          : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="scheduledFor"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
-                </div>
 
-                <div className="form-group">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn btn-primary"
-                  >
-                    {isSubmitting && (
-                      <span className="spinner-border spinner-border-sm mr-1"></span>
-                    )}
-                    create
-                  </button>
+                  <div className="form-group">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={utilStyles.link}
+                    >
+                      {isSubmitting && (
+                        <span className="spinner-border spinner-border-sm mr-1"></span>
+                      )}
+                      create
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      )}
+              </Form>
+            )}
+          </Formik>
+        )}
+      </div>
     </Layout>
   );
 };

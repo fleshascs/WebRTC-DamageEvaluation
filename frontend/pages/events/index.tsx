@@ -1,17 +1,40 @@
 import Head from "next/head";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import classnames from "classnames";
 import Layout, { siteTitle } from "../../components/layout";
 import { List, ListDivider, ListItem } from "../../components/List";
 import { TopBar } from "../../components/TopBar";
-import Date from "../../components/date";
+import DateComponent from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 import { useUser } from "../../components/auth/hooks";
 import Link from "next/link";
 import { useRooms } from "../../components/room/hooks";
-import React from "react";
+import { differenceInMinutes } from "date-fns";
+
+function isLive(scheduledFor: string) {
+  const diffInMinutes = differenceInMinutes(new Date(), new Date(scheduledFor));
+  return diffInMinutes >= 0 && diffInMinutes < 20;
+}
 
 const Events: React.FC = () => {
   const [rooms, isLoading, failed] = useRooms();
+  const [isEventLive, setIsEventLive] = useState({});
+  const isLiveTask = useRef<NodeJS.Timeout>();
+
+  const setStatuses = useCallback(() => {
+    if (!rooms) return;
+    const statuses = rooms.reduce((statuses, room) => {
+      statuses[room.id] = isLive(room.scheduledFor);
+      return statuses;
+    }, {});
+    setIsEventLive(statuses);
+  }, [rooms]);
+
+  useEffect(() => {
+    setStatuses();
+    isLiveTask.current = setInterval(setStatuses, 1000 * 60);
+    return () => clearInterval(isLiveTask.current);
+  }, [rooms]);
   return (
     <Layout>
       <Head>
@@ -22,18 +45,19 @@ const Events: React.FC = () => {
         <Link href="/room/create">
           <a>Create room</a>
         </Link>
+
         {isLoading ? "loading..." : null}
         {failed ? "failed to load" : null}
         <List>
           {rooms
             ? rooms.map((room, index) => (
-                <React.Fragment key={room.roomName}>
+                <React.Fragment key={room.id}>
                   <ListItem
-                    live={true}
+                    live={isEventLive[room.id]}
                     title={room.roomName}
                     subText={
                       <>
-                        Date: <Date dateString={room.scheduledFor} />
+                        Date: <DateComponent dateString={room.scheduledFor} />
                       </>
                     }
                     url={`/room/${room.id}`}

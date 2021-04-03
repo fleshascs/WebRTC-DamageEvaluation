@@ -24,9 +24,9 @@ const Settings: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!router.isReady) return;
     getParticipants(roomId);
-  }, [roomId]);
+  }, [router.isReady]);
 
   return (
     <Layout>

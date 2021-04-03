@@ -1,3 +1,4 @@
+import React,{ useState }  from "react";
 import Head from "next/head";
 import classnames from "classnames";
 import { useRouter } from "next/router";
@@ -7,9 +8,7 @@ import { TopBar } from "../../../components/TopBar";
 import { useRoom } from "../../../components/room/hooks";
 import { ListItem, List, ListDivider } from "../../../components/List";
 import { participantService, accountService } from "../../../services";
-import { useState } from "react";
 import { User } from "../../../services/types";
-import React from "react";
 
 type RoomParticipant = User & { inRoom: boolean };
 

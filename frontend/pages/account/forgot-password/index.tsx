@@ -1,11 +1,13 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import classnames from "classnames";
 import * as Yup from "yup";
 import { accountService } from "../../../services";
 import Link from "next/link";
 import Layout from "../../../components/layout";
 import Head from "next/head";
 import { TopBar } from "../../../components/TopBar";
+import utilStyles from "../../../styles/utils.module.css";
 
 const ForgotPassword: React.FC = () => {
   const initialValues = {
@@ -50,10 +52,10 @@ const ForgotPassword: React.FC = () => {
                 <Field
                   name="email"
                   type="text"
-                  className={
-                    "form-control" +
-                    (errors.email && touched.email ? " is-invalid" : "")
-                  }
+                  className={classnames(
+                    utilStyles.input,
+                    errors.email && touched.email ? " is-invalid" : ""
+                  )}
                 />
                 <ErrorMessage
                   name="email"

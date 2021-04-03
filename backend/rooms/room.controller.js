@@ -41,7 +41,7 @@ function create(req, res, next) {
 
 function getAll(req, res, next) {
   roomService
-    .getAll()
+    .getAll(req.user.id)
     .then((rooms) => res.json(rooms))
     .catch(next);
 }

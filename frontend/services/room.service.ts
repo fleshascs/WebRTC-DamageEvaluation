@@ -1,7 +1,7 @@
 import { BehaviorSubject } from "rxjs";
-import Router from "next/router";
 import { fetchWrapperWithAuth } from "../helpers";
 import getConfig from "next/config";
+import { Room } from "./types";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -37,6 +37,6 @@ async function getById(id: number) {
   }
 }
 
-function create(params) {
-  return fetchWrapperWithAuth.post(baseUrl, params);
+function create<T>(params: T) {
+  return fetchWrapperWithAuth.post<Room>(baseUrl, params);
 }
