@@ -42,25 +42,23 @@ export const PWAButton: React.FC = () => {
     };
   }, []);
 
-  //   if (PWAAvailable && displayMode == "browser") {
-  //     return <button onClick={showPWAPrompt}>Download APP</button>;
-  //   }
-
-  return (
-    <button onClick={showPWAPrompt} className={styles.button}>
-      <img
-        src='/icons/28352065-2f94fba8-6c4c-11e7-9536-3d8e249e048f.png'
-        width='50'
-        height='19'
-        className={styles.icon}
-        alt='PWA App'
-      />
-      <div>
-        <div className={styles.smallText}>Launch now as</div>
-        <div className={styles.title}>Web App</div>
-      </div>
-    </button>
-  );
+  if (PWAAvailable && displayMode == 'browser') {
+    return (
+      <button onClick={showPWAPrompt} className={styles.button}>
+        <img
+          src='/icons/28352065-2f94fba8-6c4c-11e7-9536-3d8e249e048f.png'
+          width='50'
+          height='19'
+          className={styles.icon}
+          alt='PWA App'
+        />
+        <div>
+          <div className={styles.smallText}>Launch now as</div>
+          <div className={styles.title}>Web App</div>
+        </div>
+      </button>
+    );
+  }
 
   return null;
 };
