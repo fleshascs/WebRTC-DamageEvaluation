@@ -28,8 +28,6 @@ const VerifyEmail: React.FC = () => {
     accountService
       .verifyEmail(token)
       .then(() => {
-        console.log('Verification successful, you can now login');
-
         // alertService.success("Verification successful, you can now login", {
         //   keepAfterRouteChange: true,
         // });

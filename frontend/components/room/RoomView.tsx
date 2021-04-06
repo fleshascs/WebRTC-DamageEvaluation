@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import classnames from 'classnames';
@@ -13,6 +13,7 @@ import RoomContext from '../../components/room/RoomContext';
 import { getRoom, getMe, getAmActiveSpeaker } from '../../redux/selectors';
 import Peers from './Peers';
 import Me from './Me';
+import Sheet from 'react-modal-sheet';
 
 interface RoomViewProps {
   roomInfo: any;
@@ -23,6 +24,7 @@ interface RoomViewProps {
 
 export const RoomView: React.FC<RoomViewProps> = (props) => {
   const { roomInfo, isLoading, failed, roomId } = props;
+  const [isOpen, setOpen] = useState(false);
   const router = useRouter();
   const roomClient = useContext(RoomContext);
   const room = useSelector(getRoom);
@@ -31,8 +33,6 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
 
   if (isLoading) return <div className={utilStyles.container}>Loading...</div>;
   if (failed) return <div className={utilStyles.container}>Technical Error, please try later</div>;
-
-  console.log('roomInfo', roomInfo);
 
   return (
     <>
@@ -95,7 +95,21 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
               <img src='/icons/manage_accounts-24px.svg' alt='record' />
             </Button>
           </Link>
+          <Button onClick={() => setOpen(true)} className={roomStyles.button}>
+            Open sheet
+          </Button>
         </div>
+
+        <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
+          <Sheet.Container>
+            <Sheet.Header />
+            <Sheet.Content>
+              <div>Your sheet content goes here </div>
+            </Sheet.Content>
+          </Sheet.Container>
+
+          <Sheet.Backdrop />
+        </Sheet>
 
         {/* <div className={roomStyles.attachmentsContainer}>
             <div className={roomStyles.attachment}></div>

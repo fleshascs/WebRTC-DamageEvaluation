@@ -64,7 +64,6 @@ function handleResponse(fetchPromise) {
   return fetchPromise.then((response) =>
     response.text().then((text) => {
       const data = text && JSON.parse(text);
-      console.log('--------------handleResponse', response);
 
       if (!response.ok) {
         // if ([401, 403].includes(response.status)) {

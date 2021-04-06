@@ -1,10 +1,10 @@
-﻿const db = require("_helpers/db");
-const { Op, QueryTypes } = require("sequelize");
+﻿const db = require('_helpers/db');
+const { Op, QueryTypes } = require('sequelize');
 
 module.exports = {
   getById,
   getAll,
-  create,
+  create
 };
 
 async function getById(id) {
@@ -14,7 +14,7 @@ async function getById(id) {
 
 async function getRoom(id) {
   const room = await db.Room.findByPk(id);
-  if (!room) throw "Room not found";
+  if (!room) throw 'Room not found';
   return room;
 }
 
@@ -46,18 +46,24 @@ async function getAll(uid) {
   // });
 
   const rooms = await db.sequelize.query(
-    "SELECT id, roomName, scheduledFor, createdBy FROM rooms r WHERE scheduledFor > ? AND (createdBy = ? OR (SELECT count(*) from roomParticipants WHERE roomId = r.id AND accountId =?) > 0) ORDER BY scheduledFor",
+    'SELECT id, roomName, scheduledFor, createdBy FROM rooms r WHERE scheduledFor > ? AND (createdBy = ? OR (SELECT count(*) from roomParticipants WHERE roomId = r.id AND accountId =?) > 0) ORDER BY scheduledFor',
     {
       replacements: [getTodayWithoutTime(), uid, uid],
-      type: QueryTypes.SELECT,
+      type: QueryTypes.SELECT
     }
   );
 
   return rooms;
 }
 
+function getUtcTime() {
+  var now = new Date();
+  var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+  return utc;
+}
+
 function getTodayWithoutTime() {
-  const today = new Date();
+  const today = getUtcTime();
   const todayWithoutTime = new Date(
     today.getFullYear(),
     today.getMonth(),

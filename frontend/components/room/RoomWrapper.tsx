@@ -83,7 +83,6 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
         e2eKey
       });
       roomService.setRoomClient(currentRoomClient);
-      console.log('-------------------------CREATING ROOM CLIENT roomId:', roomId);
       currentRoomClient.join();
     }
 
@@ -91,7 +90,6 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
 
     return () => {
       const roomClient = roomService.getRoomClient();
-      console.log('LEAVE ROOM', roomClient.roomId);
       roomClient.close();
     };
   }, [roomId]);
