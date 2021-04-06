@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import randomString from 'random-string';
 import UrlParse from 'url-parse';
 import { getStore } from '../../redux/store';
+import { roomService } from '../../services';
 
 interface RoomWrapperProps {
   children: ReactNode;
@@ -25,6 +26,9 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
 
   useEffect(() => {
     if (!roomId) return;
+
+    let currentRoomClient = roomService.getRoomClient();
+
     const urlParser = new UrlParse(window.location.href, true);
     const peerId = randomString({ length: 8 }).toLowerCase();
     let displayName = 'testName';
@@ -55,28 +59,41 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
     dispatch(stateActions.setRoomUrl(roomUrl));
     dispatch(stateActions.setRoomFaceDetection(faceDetection));
     dispatch(stateActions.setMe({ peerId, displayName, displayNameSet, device }));
-    RoomClient.init({ store: getStore() });
-    const roomClient = new RoomClient({
-      roomId,
-      peerId,
-      displayName,
-      device,
-      handlerName: handler,
-      useSimulcast,
-      useSharingSimulcast,
-      forceTcp,
-      produce,
-      consume,
-      forceH264,
-      forceVP9,
-      svc,
-      datachannel,
-      externalVideo,
-      e2eKey
-    });
-    console.log('-------------------------CREATING ROOM CLIENT roomId:', roomId);
+    if (currentRoomClient && currentRoomClient.roomId !== roomId) {
+      currentRoomClient.close();
+    }
+    if (!currentRoomClient || currentRoomClient?.isClosed()) {
+      RoomClient.init({ store: getStore() });
+      currentRoomClient = new RoomClient({
+        roomId,
+        peerId,
+        displayName,
+        device,
+        handlerName: handler,
+        useSimulcast,
+        useSharingSimulcast,
+        forceTcp,
+        produce,
+        consume,
+        forceH264,
+        forceVP9,
+        svc,
+        datachannel,
+        externalVideo,
+        e2eKey
+      });
+      roomService.setRoomClient(currentRoomClient);
+      console.log('-------------------------CREATING ROOM CLIENT roomId:', roomId);
+      currentRoomClient.join();
+    }
 
-    setRoomClient(roomClient);
+    setRoomClient(currentRoomClient);
+
+    return () => {
+      const roomClient = roomService.getRoomClient();
+      console.log('LEAVE ROOM', roomClient.roomId);
+      roomClient.close();
+    };
   }, [roomId]);
 
   if (!show) return null;

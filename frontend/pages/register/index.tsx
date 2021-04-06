@@ -43,13 +43,9 @@ const Register: React.FC = () => {
       .register(fields)
       .then(() => {
         setShowVerificationMessage(true);
-        console.log(
-          ' "Registration successful, please check your email for verification instructions"'
-        );
       })
       .catch((error) => {
         setSubmitting(false);
-        console.log(error);
       });
   }
 

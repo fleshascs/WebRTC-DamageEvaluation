@@ -29,13 +29,6 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
   const me = useSelector(getMe);
   const amActiveSpeaker = useSelector(getAmActiveSpeaker);
 
-  useEffect(() => {
-    if (roomClient) {
-      console.log('-------JOIN ROOM');
-      roomClient.join();
-    }
-  }, [roomClient]);
-
   if (isLoading) return <div className={utilStyles.container}>Loading...</div>;
   if (failed) return <div className={utilStyles.container}>Technical Error, please try later</div>;
 

@@ -16,8 +16,6 @@ export const useRoom = (roomId: number): [Room, boolean, boolean] => {
     );
     const subscriptionFailed = roomService.failed.subscribe((failed) => setFailed(failed));
     if (roomId !== roomService.roomValue?.id) {
-      console.log('fetching', roomId, '!==', roomService.roomValue?.id);
-
       roomService.getById(roomId);
     }
 

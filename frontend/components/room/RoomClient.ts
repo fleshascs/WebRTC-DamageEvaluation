@@ -87,6 +87,8 @@ export default class RoomClient
 		logger.debug(
 			'constructor() [roomId:"%s", peerId:"%s", displayName:"%s", device:%s]',
 			roomId, peerId, displayName, device.flag);
+			
+		this.roomId = roomId;
 
 		// Closed flag.
 		// @type {Boolean}
@@ -237,6 +239,10 @@ export default class RoomClient
 		{
 			e2e.setCryptoKey('setCryptoKey', this._e2eKey, true);
 		}
+	}
+
+	isClosed(){
+		return this._closed;
 	}
 
 	close()

@@ -35,7 +35,6 @@ const Login: React.FC = () => {
       })
       .catch((error) => {
         setSubmitting(false);
-        console.log(error);
 
         // alertService.error(error);
       });

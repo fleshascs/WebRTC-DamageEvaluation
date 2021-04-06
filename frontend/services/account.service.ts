@@ -67,8 +67,6 @@ function refreshToken() {
       return user;
     })
     .catch((error) => {
-      console.log('refreshToken error', error);
-
       statusSubject.next(UserState.FAILED);
       throw error;
     });
