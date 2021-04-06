@@ -73,11 +73,17 @@
 .p1 {
   padding: 1rem;
 }
+.ph1 {
+  padding: 1rem 0px;
+}
 .mt1 {
   margin-top: 1rem;
 }
 .ml2 {
   margin-left: 2rem;
+}
+.mb2 {
+  margin-bottom: 2rem;
 }
 
 .container {
@@ -101,4 +107,30 @@
 .footerText {
   color: #8a8686;
   font-size: 0.9em;
+}
+
+.errorText {
+  color: rgb(197, 13, 13);
+  font-size: 0.8em;
+}
+
+.flex {
+  flex: 1;
+}
+
+.flexColumn {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+}
+
+.container400 {
+  width: 400px;
+  margin: 0px auto;
+}
+
+@media (max-width: 600px) {
+  .container400 {
+    width: 100%;
+  }
 }

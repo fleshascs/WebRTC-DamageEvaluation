@@ -11,6 +11,7 @@ console.log('config.js:\n%s', JSON.stringify(config, null, '  '));
 require('rootpath')();
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
 const url = require('url');
 const protoo = require('protoo-server');
 const mediasoup = require('mediasoup');
@@ -384,16 +385,24 @@ async function createExpressApp() {
  * Create a Node.js HTTPS server. It listens in the IP and port given in the
  * configuration file and reuses the Express application as request listener.
  */
+// async function runHttpsServer() {
+//   logger.info('running an HTTPS server...');
+
+//   // HTTPS server for the protoo WebSocket server.
+//   const tls = {
+//     cert: fs.readFileSync(config.https.tls.cert),
+//     key: fs.readFileSync(config.https.tls.key)
+//   };
+
+//   httpsServer = https.createServer(tls, expressApp);
+
+//   await new Promise((resolve) => {
+//     httpsServer.listen(Number(config.https.listenPort), config.https.listenIp, resolve);
+//   });
+// }
 async function runHttpsServer() {
   logger.info('running an HTTPS server...');
-
-  // HTTPS server for the protoo WebSocket server.
-  const tls = {
-    cert: fs.readFileSync(config.https.tls.cert),
-    key: fs.readFileSync(config.https.tls.key)
-  };
-
-  httpsServer = https.createServer(tls, expressApp);
+  httpsServer = http.createServer(expressApp);
 
   await new Promise((resolve) => {
     httpsServer.listen(Number(config.https.listenPort), config.https.listenIp, resolve);

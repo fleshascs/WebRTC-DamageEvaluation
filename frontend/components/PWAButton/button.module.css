@@ -1,0 +1,27 @@
+.button {
+  background: #292c35;
+  border: none;
+  border-radius: 3px;
+  color: #eee;
+  font-size: 1em;
+  padding: 10px 20px;
+  font-size: 14px;
+  display: flex;
+  padding: 7px 11px;
+  cursor: pointer;
+}
+
+.icon {
+  display: flex;
+  align-self: center;
+  margin-right: 15px;
+}
+
+.title {
+  font-size: 1.1em;
+  text-align: left;
+}
+
+.smallText {
+  font-size: 0.8em;
+}

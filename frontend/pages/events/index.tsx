@@ -1,15 +1,15 @@
-import Head from "next/head";
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import classnames from "classnames";
-import Layout, { siteTitle } from "../../components/layout";
-import { List, ListDivider, ListItem } from "../../components/List";
-import { TopBar } from "../../components/TopBar";
-import DateComponent from "../../components/date";
-import utilStyles from "../../styles/utils.module.css";
-import { useUser } from "../../components/auth/hooks";
-import Link from "next/link";
-import { useRooms } from "../../components/room/hooks";
-import { differenceInMinutes } from "date-fns";
+import Head from 'next/head';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import classnames from 'classnames';
+import Layout, { siteTitle } from '../../components/layout';
+import { List, ListDivider, ListItem } from '../../components/List';
+import { TopBar } from '../../components/TopBar';
+import DateComponent from '../../components/date';
+import utilStyles from '../../styles/utils.module.css';
+import { useUser } from '../../components/auth/hooks';
+import Link from 'next/link';
+import { useRooms } from '../../components/room/hooks';
+import { differenceInMinutes } from 'date-fns';
 
 function isLive(scheduledFor: string) {
   const diffInMinutes = differenceInMinutes(new Date(), new Date(scheduledFor));
@@ -40,14 +40,14 @@ const Events: React.FC = () => {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <TopBar title="Events" />
+      <TopBar title='Events' />
       <div className={classnames(utilStyles.p1, utilStyles.container)}>
-        <Link href="/room/create">
-          <a>Create room</a>
+        <Link href='/room/create'>
+          <a className={utilStyles.link}>Create room</a>
         </Link>
-
-        {isLoading ? "loading..." : null}
-        {failed ? "failed to load" : null}
+        <div className={utilStyles.mt1}></div>
+        {isLoading ? 'loading...' : null}
+        {failed ? 'failed to load' : null}
         <List>
           {rooms
             ? rooms.map((room, index) => (

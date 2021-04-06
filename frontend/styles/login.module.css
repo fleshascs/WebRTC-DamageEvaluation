@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: 100%;
+  padding: 14px !important;
+}

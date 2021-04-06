@@ -1,6 +1,6 @@
-import React, { ReactChild } from "react";
-import styles from "./button.module.css";
-import classnames from "classnames";
+import React, { ReactChild, forwardRef } from 'react';
+import styles from './button.module.css';
+import classnames from 'classnames';
 
 interface ButtonProps {
   onClick?: () => void;
@@ -9,11 +9,11 @@ interface ButtonProps {
   component?: string;
 }
 
-export const Button: React.FC<ButtonProps> = (props) => {
-  const { component = "button", className, children, onClick } = props;
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  const { component = 'button', className, children, onClick } = props;
   return React.createElement(
     component,
-    { className: classnames(styles.button, className), onClick },
+    { className: classnames(styles.button, className), onClick, ref },
     children
   );
-};
+});

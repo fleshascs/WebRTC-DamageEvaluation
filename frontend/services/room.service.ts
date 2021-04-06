@@ -1,7 +1,7 @@
-import { BehaviorSubject } from "rxjs";
-import { fetchWrapperWithAuth } from "../helpers";
-import getConfig from "next/config";
-import { Room } from "./types";
+import { BehaviorSubject } from 'rxjs';
+import { fetchWrapperWithAuth } from '../helpers';
+import getConfig from 'next/config';
+import { Room } from './types';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -18,7 +18,7 @@ export const roomService = {
   room: roomSubject.asObservable(),
   get roomValue() {
     return roomSubject.value;
-  },
+  }
 };
 
 async function getById(id: number) {
@@ -34,8 +34,18 @@ async function getById(id: number) {
     roomSubject.next(null);
     isLoadingSubject.next(false);
     failedSubject.next(true);
+    console.log('getById error', error);
   }
 }
+// async function getById(id: number) {
+//   isLoadingSubject.next(true);
+//   failedSubject.next(false);
+//   const room = await fetchWrapperWithAuth.get(`${baseUrl}/${id}`);
+//   roomSubject.next(room);
+//   isLoadingSubject.next(false);
+//   failedSubject.next(false);
+//   return room;
+// }
 
 function create<T>(params: T) {
   return fetchWrapperWithAuth.post<Room>(baseUrl, params);

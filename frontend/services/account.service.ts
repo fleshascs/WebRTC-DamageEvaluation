@@ -1,11 +1,18 @@
-import { BehaviorSubject } from "rxjs";
-import Router from "next/router";
-import { fetchWrapper } from "../helpers";
-import getConfig from "next/config";
+import { BehaviorSubject } from 'rxjs';
+import Router from 'next/router';
+import { fetchWrapper } from '../helpers';
+import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 
-const isReadySubject = new BehaviorSubject(false);
+export enum UserState {
+  UNDEFINED,
+  FAILED,
+  LOADING,
+  AUTHENTICATED
+}
+
+const statusSubject = new BehaviorSubject(UserState.UNDEFINED);
 const userSubject = new BehaviorSubject(null);
 const baseUrl = `${publicRuntimeConfig.apiUrl}/accounts`;
 
@@ -23,23 +30,21 @@ export const accountService = {
   create,
   update,
   delete: _delete,
-  isReady: isReadySubject.asObservable(),
+  status: statusSubject.asObservable(),
   user: userSubject.asObservable(),
   get userValue() {
     return userSubject.value;
-  },
+  }
 };
 
 function login(email, password) {
-  return fetchWrapper
-    .post(`${baseUrl}/authenticate`, { email, password })
-    .then((user) => {
-      // publish user to subscribers and start timer to refresh token
-      userSubject.next(user);
-      isReadySubject.next(true);
-      startRefreshTokenTimer();
-      return user;
-    });
+  return fetchWrapper.post(`${baseUrl}/authenticate`, { email, password }).then((user) => {
+    // publish user to subscribers and start timer to refresh token
+    userSubject.next(user);
+    statusSubject.next(UserState.AUTHENTICATED);
+    startRefreshTokenTimer();
+    return user;
+  });
 }
 
 function logout() {
@@ -47,18 +52,26 @@ function logout() {
   fetchWrapper.post(`${baseUrl}/revoke-token`, {});
   stopRefreshTokenTimer();
   userSubject.next(null);
-  isReadySubject.next(true);
-  Router.push("/login");
+  statusSubject.next(UserState.UNDEFINED);
+  Router.push('/login');
 }
 
 function refreshToken() {
-  return fetchWrapper.post(`${baseUrl}/refresh-token`, {}).then((user) => {
-    // publish user to subscribers and start timer to refresh token
-    userSubject.next(user);
-    isReadySubject.next(true);
-    startRefreshTokenTimer();
-    return user;
-  });
+  return fetchWrapper
+    .post(`${baseUrl}/refresh-token`, {})
+    .then((user) => {
+      // publish user to subscribers and start timer to refresh token
+      userSubject.next(user);
+      statusSubject.next(UserState.AUTHENTICATED);
+      startRefreshTokenTimer();
+      return user;
+    })
+    .catch((error) => {
+      console.log('refreshToken error', error);
+
+      statusSubject.next(UserState.FAILED);
+      throw error;
+    });
 }
 
 function register(params) {
@@ -81,12 +94,12 @@ function resetPassword({ token, password, confirmPassword }) {
   return fetchWrapper.post(`${baseUrl}/reset-password`, {
     token,
     password,
-    confirmPassword,
+    confirmPassword
   });
 }
 
 function getAll(roomId: number, query: string) {
-  return fetchWrapper.get(baseUrl + "?q=" + query + "&roomId=" + roomId);
+  return fetchWrapper.get(baseUrl + '?q=' + query + '&roomId=' + roomId);
 }
 
 function getById(id) {
@@ -104,7 +117,7 @@ function update(id, params) {
       // publish updated user to subscribers
       user = { ...userSubject.value, ...user };
       userSubject.next(user);
-      isReadySubject.next(true);
+      statusSubject.next(UserState.AUTHENTICATED);
     }
     return user;
   });
@@ -127,7 +140,7 @@ let refreshTokenTimeout;
 
 function startRefreshTokenTimer() {
   // parse json object from base64 encoded jwt token
-  const jwtToken = JSON.parse(atob(userSubject.value.jwtToken.split(".")[1]));
+  const jwtToken = JSON.parse(atob(userSubject.value.jwtToken.split('.')[1]));
 
   // set a timeout to refresh the token a minute before it expires
   const expires = new Date(jwtToken.exp * 1000);

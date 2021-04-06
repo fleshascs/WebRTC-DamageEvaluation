@@ -1,20 +1,16 @@
-import React, { ReactChild } from "react";
-import styles from "./button.module.css";
-import classnames from "classnames";
+import React, { ReactChild, forwardRef } from 'react';
+import styles from './button.module.css';
+import classnames from 'classnames';
 
 interface ButtonProps {
-  onClick: () => void;
   children: ReactChild;
   className?: string;
 }
 
-export const Button: React.FC<ButtonProps> = (props) => {
+export const Button = forwardRef<HTMLAnchorElement, ButtonProps>((props, ref) => {
   return (
-    <button
-      className={classnames(styles.button, props.className)}
-      onClick={props.onClick}
-    >
+    <a className={classnames(styles.button, props.className)} ref={ref}>
       {props.children}
-    </button>
+    </a>
   );
-};
+});

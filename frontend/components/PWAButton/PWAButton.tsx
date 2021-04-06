@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Button } from "../Button";
+import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
+import styles from './button.module.css';
 
 function getPWADisplayMode() {
-  const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-  if (document.referrer.startsWith("android-app://")) {
-    return "twa";
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (document.referrer.startsWith('android-app://')) {
+    return 'twa';
   } else if (navigator.standalone || isStandalone) {
-    return "standalone";
+    return 'standalone';
   }
-  return "browser";
+  return 'browser';
 }
 
 export const PWAButton: React.FC = () => {
@@ -32,12 +33,12 @@ export const PWAButton: React.FC = () => {
     deferredPrompt.current.prompt();
   };
   useEffect(() => {
-    window.addEventListener("beforeinstallprompt", beforeInstallPrompt);
-    window.addEventListener("appinstalled", appInstalled);
+    window.addEventListener('beforeinstallprompt', beforeInstallPrompt);
+    window.addEventListener('appinstalled', appInstalled);
     setDisplayMode(getPWADisplayMode());
     return () => {
-      window.removeEventListener("beforeinstallprompt", beforeInstallPrompt);
-      window.removeEventListener("appinstalled", appInstalled);
+      window.removeEventListener('beforeinstallprompt', beforeInstallPrompt);
+      window.removeEventListener('appinstalled', appInstalled);
     };
   }, []);
 
@@ -45,7 +46,21 @@ export const PWAButton: React.FC = () => {
   //     return <button onClick={showPWAPrompt}>Download APP</button>;
   //   }
 
-  return <Button onClick={showPWAPrompt}>Download the APP</Button>;
+  return (
+    <button onClick={showPWAPrompt} className={styles.button}>
+      <img
+        src='/icons/28352065-2f94fba8-6c4c-11e7-9536-3d8e249e048f.png'
+        width='50'
+        height='19'
+        className={styles.icon}
+        alt='PWA App'
+      />
+      <div>
+        <div className={styles.smallText}>Launch now as</div>
+        <div className={styles.title}>Web App</div>
+      </div>
+    </button>
+  );
 
   return null;
 };
