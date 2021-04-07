@@ -1,0 +1,59 @@
+.activeSpeaker {
+  border: 2px solid yellow;
+}
+
+.peerView {
+  position: relative;
+}
+
+.videoLabel {
+  position: absolute;
+  left: 2px;
+  bottom: 9px;
+  background: #000c;
+  padding: 0px 6px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+
+.buttonsBlock {
+  background: linear-gradient(135deg, #292929, #191919);
+  width: 100%;
+  box-shadow: 0px 10px 30px rgba(28, 28, 28, 0.9);
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disabledButton {
+  color: #5a5757;
+}
+.middleButton {
+  border-radius: 50%;
+  background: #171515;
+  padding: 13px;
+  margin: 8px 0px;
+}
+
+.hidden {
+  display: none;
+}
+
+.spacedRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listIcon {
+  font-size: 1.3em;
+}

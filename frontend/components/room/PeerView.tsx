@@ -4,7 +4,7 @@ import Spinner from 'react-spinner';
 import hark from 'hark';
 import Logger from '../../helpers/Logger';
 import { Video } from '../Video';
-import roomStyles from '../../styles/room.module.css';
+import styles from './room.module.css';
 const logger = new Logger('PeerView');
 
 export default class PeerView extends React.Component {
@@ -82,23 +82,15 @@ export default class PeerView extends React.Component {
     } = this.state;
 
     return (
-      <div data-component='PeerView' className={classnames({ [roomStyles.videoThumbnail]: !isMe })}>
-        <div className='info'>
-          <div className='icons'>
-            <div
-              className={classnames('icon', 'info', { on: showInfo })}
-              onClick={() => this.setState({ showInfo: !showInfo })}
-            />
-
-            <div className={classnames('icon', 'stats')} onClick={() => onStatsClick(peer.id)} />
-          </div>
-        </div>
-
+      <div
+        data-component='PeerView'
+        className={classnames(styles.peerView, { [styles.hidden]: !videoVisible || !videoCanPlay })}
+      >
         <Video
           ref='videoElem'
           className={classnames({
             'is-me': isMe,
-            hidden: !videoVisible || !videoCanPlay,
+            [styles.hidden]: !videoVisible || !videoCanPlay,
             'network-error': videoVisible && videoMultiLayer && consumerCurrentSpatialLayer === null
           })}
           autoPlay
@@ -106,21 +98,18 @@ export default class PeerView extends React.Component {
           muted
           controls={false}
         />
-
         <audio ref='audioElem' autoPlay playsInline muted={isMe || audioMuted} controls={false} />
 
-        {/* <canvas ref='canvas' className={classnames('face-detection', { 'is-me': isMe })} /> */}
-
-        <div className='volume-container'>
+        {/* <div className='volume-container'>
           <div className={classnames('bar', `level${audioVolume}`)} />
-        </div>
-
+        </div> */}
+        {/* 
         {videoVisible && videoScore < 5 ? (
           <div className='spinner-container'>
             <Spinner />
           </div>
-        ) : null}
-
+        ) : null} */}
+        <div className={styles.videoLabel}>{peer.displayName}</div>
         {videoElemPaused ? <div className='video-elem-paused' /> : null}
       </div>
     );

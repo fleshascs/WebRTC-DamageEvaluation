@@ -29,6 +29,7 @@ export default function MyApp({ Component, pageProps }) {
         <link href='/icons/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
         <link rel='apple-touch-icon' href='/apple-icon.png'></link>
         <meta name='theme-color' content='#292c35' />
+        <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
       </Head>
       <Provider store={store}>
         <Component {...pageProps} />

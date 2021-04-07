@@ -1,35 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-// import * as appPropTypes from './appPropTypes';
-// import { Appear } from './transitions';
+import styles from './room.module.css';
 import Peer from './Peer';
 
 const Peers = ({ peers, activeSpeakerId }) => {
   return (
-    <div data-component='Peers'>
+    <>
       {peers.map((peer) => {
         return (
-          <div key={peer.id}>
-            <div
-              className={classnames('peer-container', {
-                'active-speaker': peer.id === activeSpeakerId
-              })}
-            >
-              <Peer id={peer.id} />
-            </div>
+          <div
+            key={peer.id}
+            className={classnames('peer-container', {
+              [styles.activeSpeaker]: peer.id === activeSpeakerId
+            })}
+          >
+            <Peer id={peer.id} />
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
-
-// Peers.propTypes = {
-//   peers: PropTypes.arrayOf(appPropTypes.Peer).isRequired,
-//   activeSpeakerId: PropTypes.string
-// };
 
 const mapStateToProps = (state) => {
   const peersArray = Object.values(state.peers);

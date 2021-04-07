@@ -1,7 +1,8 @@
-import { useEffect, useState, useContext } from 'react';
-import { roomService } from '../../services';
+import { useEffect, useState, useContext, useCallback } from 'react';
+import { roomService, participantService } from '../../services';
 import { roomsService } from '../../services';
-import { Room } from '../../services/types';
+import { Room, Participant } from '../../services/types';
+import { useRouter } from 'next/router';
 
 export const useRoom = (roomId: number): [Room, boolean, boolean] => {
   const [room, setRoom] = useState<Room>();
@@ -51,4 +52,22 @@ export const useRooms = (): [Room[], boolean, boolean] => {
   }, []);
 
   return [rooms, isLoading, failed];
+};
+
+export const useParticipants = (): Participant[] => {
+  const router = useRouter();
+  const roomId = parseInt(router.query.id as string);
+  const [participants, setParticipants] = useState<Participant[]>([]);
+
+  const getParticipants = useCallback(async (roomId) => {
+    const participants = await participantService.getAll(roomId);
+    setParticipants(participants);
+  }, []);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    getParticipants(roomId);
+  }, [router.isReady]);
+
+  return participants;
 };

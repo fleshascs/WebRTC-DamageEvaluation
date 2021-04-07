@@ -45,7 +45,7 @@ export const PWAButton: React.FC = () => {
   if (PWAAvailable && displayMode == 'browser') {
     return (
       <button onClick={showPWAPrompt} className={styles.button}>
-        <img
+        <Image
           src='/icons/28352065-2f94fba8-6c4c-11e7-9536-3d8e249e048f.png'
           width='50'
           height='19'

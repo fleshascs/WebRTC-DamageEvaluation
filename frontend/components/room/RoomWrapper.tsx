@@ -8,6 +8,7 @@ import randomString from 'random-string';
 import UrlParse from 'url-parse';
 import { getStore } from '../../redux/store';
 import { roomService } from '../../services';
+import { useUser } from '../auth/hooks';
 
 interface RoomWrapperProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ interface RoomWrapperProps {
 export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
   const { children, roomId } = props;
   const [show, setShow] = useState(false);
+  const user = useUser();
 
   useEffect(() => {
     setShow(true);
@@ -25,13 +27,11 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
   const [roomClient, setRoomClient] = useState(null);
 
   useEffect(() => {
-    if (!roomId) return;
-
+    if (!roomId || !user) return;
     let currentRoomClient = roomService.getRoomClient();
-
     const urlParser = new UrlParse(window.location.href, true);
     const peerId = randomString({ length: 8 }).toLowerCase();
-    let displayName = 'testName';
+    let displayName = user.firstName + ' ' + user.lastName;
     const handler = urlParser.query.handler;
     const useSimulcast = urlParser.query.simulcast !== 'false';
     const useSharingSimulcast = urlParser.query.sharingSimulcast !== 'false';
@@ -92,7 +92,7 @@ export const RoomWrapper: React.FC<RoomWrapperProps> = (props) => {
       const roomClient = roomService.getRoomClient();
       roomClient.close();
     };
-  }, [roomId]);
+  }, [roomId, user]);
 
   if (!show) return null;
 

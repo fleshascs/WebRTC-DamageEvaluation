@@ -1,7 +1,6 @@
 .videoContainer {
   background: #000;
   flex: 1;
-  height: 16rem;
 }
 .button {
   background: #c5c6cc !important;
@@ -23,13 +22,6 @@
   overflow-x: auto;
   margin-top: 5px;
 }
-.videoThumbnail {
-  flex-shrink: 0;
-  width: 100px;
-  height: 60px;
-  background: #000;
-  margin-left: 5px;
-}
 .attachment {
   width: 6rem;
   height: 6rem;
@@ -42,11 +34,21 @@
 }
 
 .container {
-  position: fixed;
+  /* position: relative; */
+  /* position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px; */
+  background-color: #000;
+  color: #fff;
+}
+
+.roomBackground {
+  position: absolute;
   top: 0px;
   bottom: 0px;
   left: 0px;
   right: 0px;
   background-color: #000;
-  color: #fff;
 }
