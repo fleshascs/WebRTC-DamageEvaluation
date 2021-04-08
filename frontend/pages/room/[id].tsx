@@ -17,7 +17,7 @@ const Room: React.FC = () => {
     <RoomWrapper roomId={roomId}>
       <Layout className={classnames(roomStyles.container, utilStyles.flexColumn)}>
         <Head>
-          <title>room</title>
+          <title>{roomInfo ? roomInfo.roomName : 'room'}</title>
         </Head>
         <TopBar title={roomInfo ? roomInfo.roomName : ''} />
         <div className={classnames(utilStyles.container, utilStyles.flexColumn)}>

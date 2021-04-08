@@ -6,7 +6,6 @@ import { List, ListDivider, ListItem } from '../../components/List';
 import { TopBar } from '../../components/TopBar';
 import DateComponent from '../../components/date';
 import utilStyles from '../../styles/utils.module.css';
-import { useUser } from '../../components/auth/hooks';
 import Link from 'next/link';
 import { useRooms } from '../../components/room/hooks';
 import { differenceInMinutes } from 'date-fns';
@@ -43,7 +42,7 @@ const Events: React.FC = () => {
       <TopBar title='Events' />
       <div className={classnames(utilStyles.p1, utilStyles.container)}>
         <Link href='/room/create'>
-          <a className={utilStyles.link}>Create room</a>
+          <a className={utilStyles.link}>Create a room</a>
         </Link>
         <div className={utilStyles.mt1}></div>
         {isLoading ? 'loading...' : null}

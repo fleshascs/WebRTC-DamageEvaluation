@@ -1,17 +1,16 @@
-import React, { ReactChild } from "react";
-import Link from "next/link";
-import utilStyles from "../../styles/utils.module.css";
-import { Container, Title } from "./ListItem";
+import React, { ReactNode } from 'react';
+import utilStyles from '../../styles/utils.module.css';
+import { Container, Title } from './ListItem';
 
 interface ListItemProps {
   title: string;
   onClick?: () => void;
   buttonText?: string;
-  text?: string;
+  children?: ReactNode;
 }
 
 export const ParticipantsListItem: React.FC<ListItemProps> = (props) => {
-  const { title, onClick, buttonText, text } = props;
+  const { title, onClick, buttonText, children } = props;
   return (
     <Container>
       <Title title={title} />
@@ -21,7 +20,7 @@ export const ParticipantsListItem: React.FC<ListItemProps> = (props) => {
             {buttonText}
           </div>
         ) : null}
-        {text}
+        {children}
       </div>
     </Container>
   );

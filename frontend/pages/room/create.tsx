@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import classnames from 'classnames';
 import * as Yup from 'yup';
-import Link from 'next/link';
 import Head from 'next/head';
 import Layout from '../../components/layout';
 import { TopBar } from '../../components/TopBar';
@@ -44,9 +43,9 @@ const CreateRoom: React.FC = () => {
   return (
     <Layout>
       <Head>
-        <title>Create room</title>
+        <title>Create a room</title>
       </Head>
-      <TopBar title='Create room' />
+      <TopBar title='Create a room' />
       <div className={classnames(utilStyles.p1, utilStyles.container)}>
         {showVerificationMessage ? (
           <div>Room crated successfully</div>
@@ -91,7 +90,11 @@ const CreateRoom: React.FC = () => {
                   </div>
 
                   <div className='form-group'>
-                    <button type='submit' disabled={isSubmitting} className={utilStyles.link}>
+                    <button
+                      type='submit'
+                      disabled={isSubmitting}
+                      className={classnames(utilStyles.link, utilStyles.mt1)}
+                    >
                       {isSubmitting && (
                         <span className='spinner-border spinner-border-sm mr-1'></span>
                       )}

@@ -1,15 +1,9 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import classnames from 'classnames';
-import Head from 'next/head';
-import Link from 'next/link';
 import utilStyles from '../../styles/utils.module.css';
-import { Video } from '../../components/Video';
 import roomStyles from '../../styles/room.module.css';
 import styles from './room.module.css';
-import { Button } from '../../components/Button';
-import { useRoom } from '../../components/room/hooks';
 import RoomContext from '../../components/room/RoomContext';
 import {
   getRoom,
@@ -27,6 +21,7 @@ import Me from './Me';
 import Sheet from 'react-modal-sheet';
 import * as cookiesManager from '../../helpers/cookiesManager';
 import { ParticipantsList } from './ParticipantsList';
+import { Layout } from '../layout';
 
 interface RoomViewProps {
   roomInfo: any;
@@ -39,7 +34,6 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
   const { roomInfo, isLoading, failed, roomId } = props;
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [isParticipantsOpen, setParticipantsOpen] = useState(false);
-  const router = useRouter();
   const roomClient = useContext(RoomContext);
   const room = useSelector(getRoom);
   const me = useSelector(getMe);
@@ -69,9 +63,6 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
 
   return (
     <div className={classnames(utilStyles.container, utilStyles.flexColumn)}>
-      <Peers />
-      <Me />
-      <div style={{ height: '66px' }} />
       <div className={styles.buttonsBlock}>
         <div
           onClick={toggleMic}
@@ -104,6 +95,11 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
           <span className='material-icons'>people_alt</span>
         </div>
       </div>
+
+      <Peers />
+      <Me />
+      <div style={{ height: '66px' }} />
+
       <Sheet isOpen={isGalleryOpen} onClose={() => setGalleryOpen(false)}>
         <Sheet.Container>
           <Sheet.Header />
@@ -117,7 +113,6 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
             </div>
           </Sheet.Content>
         </Sheet.Container>
-
         <Sheet.Backdrop />
       </Sheet>
 
@@ -125,12 +120,13 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
-            <div className={utilStyles.p1}>
-              <ParticipantsList roomId={roomId} />
-            </div>
+            <Layout className={classnames(roomStyles.container, utilStyles.flexColumn)}>
+              <div className={utilStyles.p1}>
+                <ParticipantsList roomId={roomId} />
+              </div>
+            </Layout>
           </Sheet.Content>
         </Sheet.Container>
-
         <Sheet.Backdrop />
       </Sheet>
     </div>
