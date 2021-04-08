@@ -120,11 +120,9 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
-            <Layout className={classnames(roomStyles.container, utilStyles.flexColumn)}>
-              <div className={utilStyles.p1}>
-                <ParticipantsList roomId={roomId} />
-              </div>
-            </Layout>
+            <div className={utilStyles.p1}>
+              <ParticipantsList roomId={roomId} />
+            </div>
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
