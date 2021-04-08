@@ -6,7 +6,15 @@ import { Container, Title } from '../List/ListItem';
 import utilStyles from '../../styles/utils.module.css';
 import styles from './room.module.css';
 import { useSelector } from 'react-redux';
-import { getPeers, getMicAncCamEnabled, getMe } from '../../redux/selectors';
+import {
+  getPeers,
+  getMicAncCamEnabled,
+  getMe,
+  getWebcamState,
+  getMicState,
+  getVideoProducer,
+  getAudioProducer
+} from '../../redux/selectors';
 
 interface ParticipantsListProps {
   roomId: string;
@@ -15,6 +23,11 @@ interface ParticipantsListProps {
 export const ParticipantsList: React.FC<ParticipantsListProps> = ({ roomId }) => {
   const peers = useSelector(getPeers);
   const me = useSelector(getMe);
+  const audioProducer = useSelector(getAudioProducer);
+  const videoProducer = useSelector(getVideoProducer);
+  const micState = getMicState(me, audioProducer);
+  const webcamState = getWebcamState(me, videoProducer);
+
   const getMicAncCam = useSelector(getMicAncCamEnabled);
   return (
     <>
@@ -25,6 +38,29 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ roomId }) =>
         </Link>
       </div>
       <List>
+        <React.Fragment key={me.displayName}>
+          <Container>
+            <Title title={me.displayName} />
+            <div>
+              <span
+                className={classnames('material-icons', styles.listIcon, {
+                  [styles.disabledButton]: micState !== 'on'
+                })}
+              >
+                {micState === 'on' ? 'mic' : 'mic_off'}
+              </span>
+
+              <span
+                className={classnames('material-icons', styles.listIcon, {
+                  [styles.disabledButton]: webcamState !== 'on'
+                })}
+              >
+                {webcamState === 'on' ? 'videocam' : 'videocam_off'}
+              </span>
+            </div>
+          </Container>
+          {Object.keys(peers).length ? <ListDivider /> : null}
+        </React.Fragment>
         {Object.values(peers).map((peer, index) => {
           const [micEnabled, webCamEnabled] = getMicAncCam(peer);
           return (

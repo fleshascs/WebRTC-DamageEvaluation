@@ -1,7 +1,7 @@
-import React, { ReactChild } from "react";
+import React, { ReactNode } from 'react';
 
 interface ListProps {
-  children: ReactChild[];
+  children: ReactNode[];
 }
 
 export const List: React.FC<ListProps> = (props) => {
