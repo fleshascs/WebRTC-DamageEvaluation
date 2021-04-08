@@ -18,7 +18,9 @@ import {
   getAudioProducer,
   getVideoProducer,
   getMicState,
-  getWebcamState
+  getWebcamState,
+  getPeersCount,
+  getCanChangeWebcam
 } from '../../redux/selectors';
 import Peers from './Peers';
 import Me from './Me';
@@ -46,6 +48,8 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
   const videoProducer = useSelector(getVideoProducer);
   const micState = getMicState(me, audioProducer);
   const webcamState = getWebcamState(me, videoProducer);
+  const canChangeWebcam = getCanChangeWebcam(me, videoProducer);
+  const peersCount = useSelector(getPeersCount);
 
   if (isLoading) return <div className={utilStyles.container}>Loading...</div>;
   if (failed) return <div className={utilStyles.container}>Technical Error, please try later</div>;
@@ -86,10 +90,17 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
         <div className={styles.button}>
           <span className={classnames('material-icons', styles.middleButton)}>photo_camera</span>
         </div>
+        {canChangeWebcam ? (
+          <div className={styles.button} onClick={() => roomClient.changeWebcam()}>
+            <span className='material-icons'>cameraswitch</span>
+          </div>
+        ) : null}
         <div className={styles.button} onClick={() => setGalleryOpen(true)}>
           <span className='material-icons'>collections</span>
         </div>
+
         <div className={styles.button} onClick={() => setParticipantsOpen(true)}>
+          <span className={styles.badge}>{peersCount + 1}</span>
           <span className='material-icons'>people_alt</span>
         </div>
       </div>

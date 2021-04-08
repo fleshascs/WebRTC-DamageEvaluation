@@ -7,6 +7,7 @@ export const getVideoProducer = (state) =>
   Object.values(state.producers).find((producer) => producer.track.kind === 'video');
 
 export const getPeers = (state) => state.peers;
+export const getPeersCount = (state) => Object.keys(state.peers).length;
 
 export const getMicAncCamEnabled = (state) => (peer) => {
   const consumersArray = peer.consumers.map((consumerId) => state.consumers[consumerId]);
@@ -34,4 +35,8 @@ export const getWebcamState = (me, videoProducer) => {
   else if (videoProducer && videoProducer.type !== 'share') webcamState = 'on';
   else webcamState = 'off';
   return webcamState;
+};
+
+export const getCanChangeWebcam = (me, videoProducer) => {
+  return Boolean(videoProducer) && videoProducer.type !== 'share' && me.canChangeWebcam;
 };
