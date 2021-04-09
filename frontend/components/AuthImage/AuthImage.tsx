@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchWrapper } from '../../helpers';
 
 interface AuthImageProps extends React.ButtonHTMLAttributes<HTMLImageElement> {
@@ -7,32 +7,40 @@ interface AuthImageProps extends React.ButtonHTMLAttributes<HTMLImageElement> {
 
 export const AuthImage: React.FC<AuthImageProps> = (props) => {
   const { src, ...other } = props;
-  const imgRef = useRef(null);
-  const ObjectURLRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState('');
 
   useEffect(() => {
-    if (!src || !ObjectURLRef) return;
+    if (!src) return;
+
     fetch(src, {
       method: 'GET',
       headers: fetchWrapper.authHeader(src)
     })
       .then((response) => response.blob())
-      .then((blob) => (ObjectURLRef.current = URL.createObjectURL(blob)));
-  }, [imgRef.current]);
-
-  useEffect(() => {
-    if (!imgRef.current) return;
-    imgRef.current.src = ObjectURLRef.current;
-  }, [imgRef.current, ObjectURLRef.current]);
-
-  const onLoad = () => {
-    if (!imgRef.current) {
-      imgRef.current.src = ObjectURLRef.current;
-    }
-    setLoaded(true);
-  };
+      .then(convertBlobToBase64)
+      .then((base64) => setImgSrc(base64 as string));
+  }, []);
 
   const imageStyle = !loaded ? { display: 'none' } : {};
-  return <img ref={imgRef} {...other} style={imageStyle} onLoad={onLoad} />;
+  return (
+    <img
+      {...other}
+      src={imgSrc}
+      style={imageStyle}
+      onLoad={() => {
+        setLoaded(true);
+      }}
+    />
+  );
 };
+
+const convertBlobToBase64 = (blob: Blob): Promise<FileReader['result']> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
