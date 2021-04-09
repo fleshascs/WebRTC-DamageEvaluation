@@ -1,11 +1,51 @@
 ﻿const db = require('_helpers/db');
 const { Op, QueryTypes } = require('sequelize');
+const path = require('path');
+const sanitize = require('sanitize-filename');
+var fs = require('fs');
+var dir = './tmp';
 
 module.exports = {
   getById,
   getAll,
-  create
+  create,
+  upload
 };
+
+const uploadDir = path.join(__dirname, '../public/uploads/rooms');
+
+function upload(files, accountId, roomId) {
+  return new Promise((resolve, reject) => {
+    let sampleFile;
+    let uploadPath;
+
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+    sampleFile = files.sampleFile;
+    const fileName = sanitize(sampleFile.name);
+    const sanitizedRoomId = sanitize(roomId);
+    const dir = `${uploadDir}/${sanitizedRoomId}`;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    uploadPath = `${dir}/${fileName}`;
+
+    // Use the mv() method to place the file somewhere on your server
+    sampleFile.mv(uploadPath, async function (err) {
+      if (err) return reject(err);
+
+      // const file = new db.upload({
+      //   filePath: fileName,
+      //   accountId: accountId,
+      //   roomId: roomId
+      // });
+      // await file.save();
+
+      resolve('File uploaded!');
+    });
+  });
+}
 
 async function getById(id) {
   const room = await getRoom(id);

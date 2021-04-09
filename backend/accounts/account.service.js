@@ -1,11 +1,11 @@
-﻿const config = require("config.json");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const { Op, QueryTypes } = require("sequelize");
-const sendEmail = require("_helpers/send-email");
-const db = require("_helpers/db");
-const Role = require("_helpers/role");
+﻿const config = require('config.json');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const { Op, QueryTypes } = require('sequelize');
+const sendEmail = require('_helpers/send-email');
+const db = require('_helpers/db');
+const Role = require('_helpers/role');
 
 module.exports = {
   authenticate,
@@ -20,20 +20,16 @@ module.exports = {
   getById,
   create,
   update,
-  delete: _delete,
+  delete: _delete
 };
 
 async function authenticate({ email, password, ipAddress }) {
-  const account = await db.Account.scope("withHash").findOne({
-    where: { email },
+  const account = await db.Account.scope('withHash').findOne({
+    where: { email }
   });
 
-  if (
-    !account ||
-    !account.isVerified ||
-    !(await bcrypt.compare(password, account.passwordHash))
-  ) {
-    throw "Email or password is incorrect";
+  if (!account || !account.isVerified || !(await bcrypt.compare(password, account.passwordHash))) {
+    throw 'Email or password is incorrect';
   }
 
   // authentication successful so generate jwt and refresh tokens
@@ -47,7 +43,7 @@ async function authenticate({ email, password, ipAddress }) {
   return {
     ...basicDetails(account),
     jwtToken,
-    refreshToken: refreshToken.token,
+    refreshToken: refreshToken.token
   };
 }
 
@@ -70,7 +66,7 @@ async function refreshToken({ token, ipAddress }) {
   return {
     ...basicDetails(account),
     jwtToken,
-    refreshToken: newRefreshToken.token,
+    refreshToken: newRefreshToken.token
   };
 }
 
@@ -86,10 +82,13 @@ async function revokeToken({ token, ipAddress }) {
 async function register(params, origin) {
   // validate
   if (await db.Account.findOne({ where: { email: params.email } })) {
-    console.log("already registered");
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('already registered');
+      return;
+    }
 
     // send already registered error in email to prevent account enumeration
-    //return await sendAlreadyRegisteredEmail(params.email, origin);
+    return await sendAlreadyRegisteredEmail(params.email, origin);
   }
 
   // create account object
@@ -106,19 +105,20 @@ async function register(params, origin) {
   // save account
   await account.save();
 
-  console.log(
-    `${origin}/account/verify-email?token=${account.verificationToken}`
-  );
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`${origin}/account/verify-email?token=${account.verificationToken}`);
+    return;
+  }
   // send email
-  //await sendVerificationEmail(account, origin);
+  await sendVerificationEmail(account, origin);
 }
 
 async function verifyEmail({ token }) {
   const account = await db.Account.findOne({
-    where: { verificationToken: token },
+    where: { verificationToken: token }
   });
 
-  if (!account) throw "Verification failed";
+  if (!account) throw 'Verification failed';
 
   account.verified = Date.now();
   account.verificationToken = null;
@@ -144,11 +144,11 @@ async function validateResetToken({ token }) {
   const account = await db.Account.findOne({
     where: {
       resetToken: token,
-      resetTokenExpires: { [Op.gt]: Date.now() },
-    },
+      resetTokenExpires: { [Op.gt]: Date.now() }
+    }
   });
 
-  if (!account) throw "Invalid token";
+  if (!account) throw 'Invalid token';
 
   return account;
 }
@@ -186,10 +186,10 @@ async function getAll(roomId, query) {
   // const accounts = await db.Account.findAll(options);
 
   const accounts = await db.sequelize.query(
-    "SELECT id, firstName, lastName, (select count(*) from roomParticipants where accountId = ac.id and roomId = ?) as inRoom FROM accounts ac WHERE firstName like ?",
+    'SELECT id, firstName, lastName, (select count(*) from roomParticipants where accountId = ac.id and roomId = ?) as inRoom FROM accounts ac WHERE firstName like ?',
     {
       replacements: [roomId, `%${query}%`],
-      type: QueryTypes.SELECT,
+      type: QueryTypes.SELECT
     }
   );
 
@@ -254,13 +254,13 @@ async function _delete(id) {
 
 async function getAccount(id) {
   const account = await db.Account.findByPk(id);
-  if (!account) throw "Account not found";
+  if (!account) throw 'Account not found';
   return account;
 }
 
 async function getRefreshToken(token) {
   const refreshToken = await db.RefreshToken.findOne({ where: { token } });
-  if (!refreshToken || !refreshToken.isActive) throw "Invalid token";
+  if (!refreshToken || !refreshToken.isActive) throw 'Invalid token';
   return refreshToken;
 }
 
@@ -271,7 +271,7 @@ async function hash(password) {
 function generateJwtToken(account) {
   // create a jwt token containing the account id that expires in 15 minutes
   return jwt.sign({ sub: account.id, id: account.id }, config.secret, {
-    expiresIn: "15m",
+    expiresIn: '15m'
   });
 }
 
@@ -281,26 +281,16 @@ function generateRefreshToken(account, ipAddress) {
     accountId: account.id,
     token: randomTokenString(),
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    createdByIp: ipAddress,
+    createdByIp: ipAddress
   });
 }
 
 function randomTokenString() {
-  return crypto.randomBytes(40).toString("hex");
+  return crypto.randomBytes(40).toString('hex');
 }
 
 function basicDetails(account) {
-  const {
-    id,
-    title,
-    firstName,
-    lastName,
-    email,
-    role,
-    created,
-    updated,
-    isVerified,
-  } = account;
+  const { id, title, firstName, lastName, email, role, created, updated, isVerified } = account;
   return {
     id,
     title,
@@ -310,7 +300,7 @@ function basicDetails(account) {
     role,
     created,
     updated,
-    isVerified,
+    isVerified
   };
 }
 
@@ -327,10 +317,10 @@ async function sendVerificationEmail(account, origin) {
 
   await sendEmail({
     to: account.email,
-    subject: "Sign-up Verification API - Verify Email",
+    subject: 'Sign-up Verification API - Verify Email',
     html: `<h4>Verify Email</h4>
                <p>Thanks for registering!</p>
-               ${message}`,
+               ${message}`
   });
 }
 
@@ -344,10 +334,10 @@ async function sendAlreadyRegisteredEmail(email, origin) {
 
   await sendEmail({
     to: email,
-    subject: "Sign-up Verification API - Email Already Registered",
+    subject: 'Sign-up Verification API - Email Already Registered',
     html: `<h4>Email Already Registered</h4>
                <p>Your email <strong>${email}</strong> is already registered.</p>
-               ${message}`,
+               ${message}`
   });
 }
 
@@ -364,8 +354,8 @@ async function sendPasswordResetEmail(account, origin) {
 
   await sendEmail({
     to: account.email,
-    subject: "Sign-up Verification API - Reset Password",
+    subject: 'Sign-up Verification API - Reset Password',
     html: `<h4>Reset Password Email</h4>
-               ${message}`,
+               ${message}`
   });
 }

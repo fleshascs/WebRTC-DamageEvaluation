@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 import utilStyles from '../../styles/utils.module.css';
-import roomStyles from '../../styles/room.module.css';
 import styles from './room.module.css';
 import RoomContext from '../../components/room/RoomContext';
 import {
@@ -21,7 +20,14 @@ import Me from './Me';
 import Sheet from 'react-modal-sheet';
 import * as cookiesManager from '../../helpers/cookiesManager';
 import { ParticipantsList } from './ParticipantsList';
-import { Layout } from '../layout';
+import { Uploads } from './Uploads';
+import getConfig from 'next/config';
+import { AuthImage } from '../AuthImage';
+import { BottomBar } from './BottomBar';
+import { uploadService } from '../../services';
+const { publicRuntimeConfig } = getConfig();
+
+const baseUrl = `${publicRuntimeConfig.apiUrl}/room`;
 
 interface RoomViewProps {
   roomInfo: any;
@@ -63,38 +69,23 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
 
   return (
     <div className={classnames(utilStyles.container, utilStyles.flexColumn)}>
-      <div className={styles.buttonsBlock}>
-        <div
-          onClick={toggleMic}
-          className={classnames(styles.button, { [styles.disabledButton]: micState !== 'on' })}
-        >
-          <span className='material-icons'>{micState === 'on' ? 'mic' : 'mic_off'}</span>
-        </div>
-        <div
-          onClick={toggleCam}
-          className={classnames(styles.button, { [styles.disabledButton]: webcamState !== 'on' })}
-        >
-          <span className='material-icons'>
-            {webcamState === 'on' ? 'videocam' : 'videocam_off'}
-          </span>
-        </div>
-        <div className={styles.button}>
-          <span className={classnames('material-icons', styles.middleButton)}>photo_camera</span>
-        </div>
-        {canChangeWebcam ? (
-          <div className={styles.button} onClick={() => roomClient.changeWebcam()}>
-            <span className='material-icons'>cameraswitch</span>
-          </div>
-        ) : null}
-        <div className={styles.button} onClick={() => setGalleryOpen(true)}>
-          <span className='material-icons'>collections</span>
-        </div>
+      <BottomBar
+        micState={micState}
+        roomClient={roomClient}
+        canChangeWebcam={canChangeWebcam}
+        takePicture={() => uploadService.sendFile()}
+        peersCount={peersCount}
+        toggleCam={toggleCam}
+        toggleMic={toggleMic}
+        setGalleryOpen={setGalleryOpen}
+        webcamState={webcamState}
+        setParticipantsOpen={setParticipantsOpen}
+      />
 
-        <div className={styles.button} onClick={() => setParticipantsOpen(true)}>
-          <span className={styles.badge}>{peersCount + 1}</span>
-          <span className='material-icons'>people_alt</span>
-        </div>
-      </div>
+      <form action={`${baseUrl}/${roomId}/uploads`} method='post' encType='multipart/form-data'>
+        <input type='file' name='sampleFile' />
+        <input type='submit' value='Upload!' />
+      </form>
 
       <Peers />
       <Me />
@@ -104,13 +95,7 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
-            <div className={roomStyles.attachmentsContainer}>
-              <div className={roomStyles.attachment}></div>
-              <div className={roomStyles.attachment}></div>
-              <div className={roomStyles.attachment}></div>
-              <div className={roomStyles.attachment}></div>
-              <div className={roomStyles.attachment}></div>
-            </div>
+            <Uploads />
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />

@@ -1,23 +1,16 @@
-﻿const config = require("config.json");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const { Op } = require("sequelize");
-const sendEmail = require("_helpers/send-email");
-const db = require("_helpers/db");
-const Role = require("_helpers/role");
-const Sequelize = require("sequelize");
+﻿const db = require('_helpers/db');
 
 module.exports = {
   addParticipant,
   getAll,
+  getByUserId
 };
 
 async function addParticipant(roomId, participantIds) {
   const participants = await db.RoomParticipant.bulkCreate(
     participantIds.map((participantId) => ({
       accountId: participantId,
-      roomId,
+      roomId
     }))
   );
   return participants;
@@ -26,8 +19,17 @@ async function addParticipant(roomId, participantIds) {
 async function getAll(roomId) {
   return await db.RoomParticipant.findAll({
     where: {
-      roomId,
+      roomId
     },
-    include: [{ model: db.Account, required: false }],
+    include: [{ model: db.Account, required: false }]
+  });
+}
+
+async function getByUserId(roomId, accountId) {
+  return await db.RoomParticipant.findOne({
+    where: {
+      roomId,
+      accountId
+    }
   });
 }

@@ -77,3 +77,15 @@
   color: #f1bb55;
   font-size: 0.8em;
 }
+
+.galleryImage {
+  width: 100%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  font-size: 2em;
+}

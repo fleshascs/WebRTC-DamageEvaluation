@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useCallback } from 'react';
 import { roomService, participantService } from '../../services';
-import { roomsService } from '../../services';
+import { roomsService, uploadService } from '../../services';
 import { Room, Participant } from '../../services/types';
 import { useRouter } from 'next/router';
 
@@ -70,4 +70,22 @@ export const useParticipants = (): Participant[] => {
   }, [router.isReady]);
 
   return participants;
+};
+
+export const useUploads = (): any[] => {
+  const router = useRouter();
+  const roomId = parseInt(router.query.id as string);
+  const [uploads, setUploads] = useState<any>([]);
+
+  const getUploads = useCallback(async (roomId) => {
+    const uploads = await uploadService.getAll(roomId);
+    setUploads(uploads);
+  }, []);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    getUploads(roomId);
+  }, [router.isReady]);
+
+  return uploads;
 };

@@ -1,6 +1,6 @@
-const config = require("config.json");
-const mysql = require("mysql2/promise");
-const { Sequelize } = require("sequelize");
+const config = require('config.json');
+const mysql = require('mysql2/promise');
+const { Sequelize } = require('sequelize');
 
 module.exports = db = {};
 
@@ -13,32 +13,39 @@ async function initialize() {
     host,
     port,
     user,
-    password,
+    password
   });
   await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
   // connect to db
   const sequelize = new Sequelize(database, user, password, {
-    dialect: "mysql",
+    dialect: 'mysql'
   });
   db.sequelize = sequelize;
   // init models and add them to the exported db object
-  db.Account = require("../accounts/account.model")(sequelize);
-  db.RefreshToken = require("../accounts/refresh-token.model")(sequelize);
-  db.Room = require("../rooms/room.model")(sequelize);
-  db.RoomParticipant = require("../rooms/roomParticipant.model")(sequelize);
+  db.Account = require('../accounts/account.model')(sequelize);
+  db.RefreshToken = require('../accounts/refresh-token.model')(sequelize);
+  db.Room = require('../rooms/room.model')(sequelize);
+  db.RoomParticipant = require('../rooms/roomParticipant.model')(sequelize);
+  db.Upload = require('../rooms/uploads.model')(sequelize);
 
   // define relationships
-  db.Account.hasMany(db.RefreshToken, { onDelete: "CASCADE" });
+  db.Account.hasMany(db.RefreshToken, { onDelete: 'CASCADE' });
   db.RefreshToken.belongsTo(db.Account);
 
-  db.Room.hasMany(db.RoomParticipant, { onDelete: "CASCADE" });
+  db.Room.hasMany(db.RoomParticipant, { onDelete: 'CASCADE' });
   db.Account.hasMany(db.RoomParticipant, {
-    onDelete: "CASCADE",
-    foreignKey: "accountId",
+    onDelete: 'CASCADE',
+    foreignKey: 'accountId'
   });
   db.RoomParticipant.belongsTo(db.Account);
   db.RoomParticipant.belongsTo(db.Room);
+
+  db.Account.hasMany(db.Upload, { onDelete: 'CASCADE', foreignKey: 'accountId' });
+  db.Upload.belongsTo(db.Account);
+
+  db.Room.hasMany(db.Upload, { onDelete: 'CASCADE', foreignKey: 'roomId' });
+  db.Upload.belongsTo(db.Room);
 
   // sync all models with database
   await sequelize.sync({ alter: true });

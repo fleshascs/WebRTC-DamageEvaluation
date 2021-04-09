@@ -25,6 +25,7 @@ const Room = require('./lib/Room');
 const errorHandler = require('_middleware/error-handler');
 const interactiveServer = require('./lib/interactiveServer');
 const interactiveClient = require('./lib/interactiveClient');
+const fileUpload = require('express-fileupload');
 
 const logger = new Logger();
 
@@ -130,6 +131,7 @@ async function createExpressApp() {
   expressApp.use(bodyParser.urlencoded({ extended: false }));
   expressApp.use(bodyParser.json());
   expressApp.use(cookieParser());
+  expressApp.use(fileUpload({ debug: true }));
 
   // allow cors requests from any origin and with credentials
   expressApp.use(
@@ -143,23 +145,23 @@ async function createExpressApp() {
   expressApp.use('/accounts', require('./accounts/accounts.controller'));
   expressApp.use('/room', require('./rooms/room.controller'));
 
-  /**
-   * For every API request, verify that the roomId in the path matches and
-   * existing room.
-   */
-  expressApp.param('roomId', (req, res, next, roomId) => {
-    // The room must exist for all API requests.
-    if (!rooms.has(roomId)) {
-      const error = new Error(`room with id "${roomId}" not found`);
+  // /**
+  //  * For every API request, verify that the roomId in the path matches and
+  //  * existing room.
+  //  */
+  // expressApp.param('roomId', (req, res, next, roomId) => {
+  //   // The room must exist for all API requests.
+  //   if (!rooms.has(roomId)) {
+  //     const error = new Error(`room with id "${roomId}" not found`);
 
-      error.status = 404;
-      throw error;
-    }
+  //     error.status = 404;
+  //     throw error;
+  //   }
 
-    req.room = rooms.get(roomId);
+  //   req.room = rooms.get(roomId);
 
-    next();
-  });
+  //   next();
+  // });
 
   /**
    * API GET resource that returns the mediasoup Router RTP capabilities of
