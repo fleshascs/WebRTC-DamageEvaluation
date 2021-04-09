@@ -10,6 +10,7 @@ import { TopBar } from '../../components/TopBar';
 import { accountService } from '../../services';
 import utilStyles from '../../styles/utils.module.css';
 import loginStyles from '../../styles/login.module.css';
+import toast from 'react-hot-toast';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -24,19 +25,14 @@ const Login: React.FC = () => {
   });
 
   function onSubmit({ email, password }, { setSubmitting }) {
-    //alertService.clear();
     accountService
       .login(email, password)
       .then(() => {
-        // const { from } = location.state || { from: { pathname: "/" } };
-        //history.push(from);
-
         router.push('/events');
       })
       .catch((error) => {
         setSubmitting(false);
-
-        // alertService.error(error);
+        toast.error(error);
       });
   }
 

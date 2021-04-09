@@ -3,11 +3,11 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import classnames from 'classnames';
 import * as Yup from 'yup';
 import { accountService } from '../../../services';
-import Link from 'next/link';
 import Layout from '../../../components/layout';
 import Head from 'next/head';
 import { TopBar } from '../../../components/TopBar';
 import utilStyles from '../../../styles/utils.module.css';
+import toast from 'react-hot-toast';
 
 const ForgotPassword: React.FC = () => {
   const initialValues = {
@@ -19,16 +19,14 @@ const ForgotPassword: React.FC = () => {
   });
 
   function onSubmit({ email }, { setSubmitting }) {
-    // alertService.clear();
     accountService
       .forgotPassword(email)
       .then(() => {
-        // alertService.success(
-        //   "Please check your email for password reset instructions"
-        // )
-        console.log('Please check your email for password reset instructions');
+        toast.success('Please check your email for password reset instructions');
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        toast.error(error);
+      })
       .finally(() => setSubmitting(false));
   }
 

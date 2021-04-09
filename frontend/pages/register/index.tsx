@@ -10,6 +10,7 @@ import { accountService } from '../../services';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.css';
 import loginStyles from '../../styles/login.module.css';
+import toast from 'react-hot-toast';
 
 const Register: React.FC = () => {
   const router = useRouter();
@@ -45,6 +46,7 @@ const Register: React.FC = () => {
         setShowVerificationMessage(true);
       })
       .catch((error) => {
+        toast.error(error);
         setSubmitting(false);
       });
   }

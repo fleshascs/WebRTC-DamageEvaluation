@@ -3,6 +3,7 @@ import Head from 'next/head';
 import classnames from 'classnames';
 import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
+import { Toaster } from 'react-hot-toast';
 
 export const siteTitle = 'Next.js Sample Website';
 
@@ -26,6 +27,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, className }) => {
         <meta name='og:title' content={siteTitle} />
         <meta name='twitter:card' content='summary_large_image' />
       </Head>
+      <Toaster />
       <header className={styles.header}></header>
       <main className={utilStyles.flexColumn}>{children}</main>
     </div>

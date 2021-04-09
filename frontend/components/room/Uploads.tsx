@@ -14,7 +14,6 @@ export const Uploads: React.FC = () => {
   const [isGalleryModalOpen, setGalleryModalOpen] = useState(false);
   const [galleryModalImageSrc, setGalleryModalImageSrc] = useState(null);
   const uploads = useUploads();
-  console.log('uploads', uploads);
 
   return (
     <div className={roomStyles.attachmentsContainer}>

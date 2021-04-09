@@ -7,6 +7,7 @@ import Head from 'next/head';
 import Layout from '../../../components/layout';
 import { TopBar } from '../../../components/TopBar';
 import utilStyles from '../../../styles/utils.module.css';
+import toast from 'react-hot-toast';
 
 const VerifyEmail: React.FC = () => {
   const router = useRouter();
@@ -21,16 +22,10 @@ const VerifyEmail: React.FC = () => {
   useEffect(() => {
     const { token } = router.query;
     if (!token) return;
-
-    // remove token from url to prevent http referer leakage
-    // router.push(location.pathname);
-
     accountService
       .verifyEmail(token)
       .then(() => {
-        // alertService.success("Verification successful, you can now login", {
-        //   keepAfterRouteChange: true,
-        // });
+        toast.success('Verification successful, you can now login');
         router.push('/login');
       })
       .catch(() => {
