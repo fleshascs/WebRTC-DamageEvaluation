@@ -102,7 +102,7 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
           name='sampleFile'
           ref={fileInput}
           onChange={onFileInputChange}
-          accept='image/x-png,image/gif,image/jpeg'
+          accept='image/*'
         />
         <input type='submit' value='Upload!' />
       </form>
