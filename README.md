@@ -12,7 +12,7 @@ try demo app at [webrtc.fleshas.lt](https://webrtc.fleshas.lt)
 
 ## Examples
 
-![](/demo/rsz_events2_iphone12black_portrait.png)
+![](/frontend/public/images/rsz_events2_iphone12black_portrait.png)
 
 
 ### License

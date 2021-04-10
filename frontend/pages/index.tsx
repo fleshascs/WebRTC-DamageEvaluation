@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
@@ -29,10 +30,6 @@ export default function Home() {
             </p>
           </div>
           <div className={homeStyles.loginButtons}>
-            {/* <Link href={`/login`}>
-              <GoogleButton>Sign in with Google</GoogleButton>
-            </Link> */}
-
             <Link href={user ? '/events' : '/login'}>
               <a className={classnames(homeStyles.loginButton, homeStyles.homeButton)}>
                 Go to the events
@@ -41,6 +38,12 @@ export default function Home() {
 
             <PWAButton />
           </div>
+          <Image
+            src='/images/rsz_events2_iphone12black_portrait.png'
+            width='300'
+            height='567'
+            alt='events'
+          />
         </div>
       </div>
     </Layout>

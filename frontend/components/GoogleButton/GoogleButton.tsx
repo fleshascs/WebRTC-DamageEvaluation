@@ -19,3 +19,11 @@ export const GoogleButton = forwardRef<HTMLButtonElement, ButtonProps>((props, r
     </button>
   );
 });
+
+{
+  /*
+   <Link href={`/login`}>
+   <GoogleButton>Sign in with Google</GoogleButton>
+  </Link> 
+  */
+}
