@@ -26,7 +26,10 @@ export const Uploads: React.FC = () => {
             zIndex: 10000000
           },
           content: {
-            inset: '0px',
+            top: '0px',
+            left: '0px',
+            right: '0px',
+            bottom: '0px',
             padding: '0px',
             position: 'relative'
           }
