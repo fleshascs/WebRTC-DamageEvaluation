@@ -38,58 +38,62 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ roomId }) =>
         </Link>
       </div>
       <List>
-        <React.Fragment key={me.displayName}>
-          <Container>
-            <Title title={me.displayName} />
-            <div>
-              <span
-                className={classnames('material-icons', styles.listIcon, {
-                  [styles.disabledButton]: micState !== 'on'
-                })}
-              >
-                {micState === 'on' ? 'mic' : 'mic_off'}
-              </span>
-
-              <span
-                className={classnames('material-icons', styles.listIcon, {
-                  [styles.disabledButton]: webcamState !== 'on'
-                })}
-              >
-                {webcamState === 'on' ? 'videocam' : 'videocam_off'}
-              </span>
-            </div>
-          </Container>
-          {Object.keys(peers).length ? <ListDivider /> : null}
-        </React.Fragment>
+        <Participant
+          key={me.displayName}
+          displayName={me.displayName}
+          micEnabled={micState === 'on'}
+          webCamEnabled={webcamState === 'on'}
+          showDivider={!!Object.keys(peers).length}
+        />
         {Object.values(peers).map((peer, index) => {
           const [micEnabled, webCamEnabled] = getMicAncCam(peer);
           return (
-            <React.Fragment key={peer.displayName}>
-              <Container>
-                <Title title={peer.displayName} />
-                <div>
-                  <span
-                    className={classnames('material-icons', styles.listIcon, {
-                      [styles.disabledButton]: !micEnabled
-                    })}
-                  >
-                    {micEnabled ? 'mic' : 'mic_off'}
-                  </span>
-
-                  <span
-                    className={classnames('material-icons', styles.listIcon, {
-                      [styles.disabledButton]: !webCamEnabled
-                    })}
-                  >
-                    {webCamEnabled ? 'videocam' : 'videocam_off'}
-                  </span>
-                </div>
-              </Container>
-              {index + 1 < Object.keys(peers).length ? <ListDivider /> : null}
-            </React.Fragment>
+            <Participant
+              key={peer.displayName}
+              displayName={peer.displayName}
+              micEnabled={micEnabled}
+              webCamEnabled={webCamEnabled}
+              showDivider={index + 1 < Object.keys(peers).length}
+            />
           );
         })}
       </List>
     </>
+  );
+};
+
+interface ParticipantProps {
+  displayName: string;
+  webCamEnabled: boolean;
+  micEnabled: boolean;
+  showDivider: boolean;
+}
+
+export const Participant: React.FC<ParticipantProps> = (props) => {
+  const { displayName, webCamEnabled, micEnabled, showDivider } = props;
+  return (
+    <React.Fragment>
+      <Container>
+        <Title title={displayName} />
+        <div>
+          <span
+            className={classnames('material-icons', styles.listIcon, {
+              [styles.disabledButton]: !micEnabled
+            })}
+          >
+            {micEnabled ? 'mic' : 'mic_off'}
+          </span>
+
+          <span
+            className={classnames('material-icons', styles.listIcon, {
+              [styles.disabledButton]: !webCamEnabled
+            })}
+          >
+            {webCamEnabled ? 'videocam' : 'videocam_off'}
+          </span>
+        </div>
+      </Container>
+      {showDivider ? <ListDivider /> : null}
+    </React.Fragment>
   );
 };

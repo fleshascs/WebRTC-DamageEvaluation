@@ -87,8 +87,7 @@ export default class PeerView extends React.Component {
       >
         <Video
           ref='videoElem'
-          className={classnames({
-            [styles.myVideoElement]: isMe,
+          className={classnames(styles.myVideoElement, {
             [styles.hidden]: !videoVisible || !videoCanPlay,
             'network-error': videoVisible && videoMultiLayer && consumerCurrentSpatialLayer === null
           })}
@@ -98,17 +97,7 @@ export default class PeerView extends React.Component {
           controls={false}
         />
         <audio ref='audioElem' autoPlay playsInline muted={isMe || audioMuted} controls={false} />
-
-        {/* <div className='volume-container'>
-          <div className={classnames('bar', `level${audioVolume}`)} />
-        </div> */}
-        {/* 
-        {videoVisible && videoScore < 5 ? (
-          <div className='spinner-container'>
-            <Spinner />
-          </div>
-        ) : null} */}
-        <div className={styles.videoLabel}>{peer.displayName}</div>
+        {!isMe ? <div className={styles.videoLabel}>{peer.displayName}</div> : null}
         {videoElemPaused ? <div className='video-elem-paused' /> : null}
       </div>
     );
@@ -149,8 +138,6 @@ export default class PeerView extends React.Component {
   }
 
   _setTracks(audioTrack, videoTrack) {
-    const { faceDetection } = this.props;
-
     if (this._audioTrack === audioTrack && this._videoTrack === videoTrack) return;
 
     this._audioTrack = audioTrack;
@@ -159,8 +146,6 @@ export default class PeerView extends React.Component {
     if (this._hark) this._hark.stop();
 
     this._stopVideoResolution();
-
-    // if (faceDetection) this._stopFaceDetection();
 
     const { audioElem, videoElem } = this.refs;
 
@@ -196,8 +181,6 @@ export default class PeerView extends React.Component {
       videoElem.play().catch((error) => logger.warn('videoElem.play() failed:%o', error));
 
       this._startVideoResolution();
-
-      // if (faceDetection) this._startFaceDetection();
     } else {
       videoElem.srcObject = null;
     }

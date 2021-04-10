@@ -20,7 +20,7 @@
 
 .videoLabel {
   position: absolute;
-  left: 2px;
+  right: 2px;
   bottom: 9px;
   background: #000c;
   padding: 0px 6px;
@@ -126,6 +126,29 @@
     left: 20px;
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
+
+  .peerContainer {
+    box-flex: 1;
+    flex: 0 0 auto;
+    height: 382px;
+    width: 450px;
+    margin: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 5px 12px 2px rgb(17 17 17 / 50%);
+    transition-property: border-color;
+    transition-duration: 0.35s;
+  }
+
+  .peers {
+    width: 100%;
+    padding: 40px 0 220px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
 }
 @media (max-width: 720px) {
   .myVideoContainer {
@@ -134,5 +157,26 @@
     bottom: 75px;
     left: 10px;
     border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .peerContainer {
+    box-flex: 100;
+    flex: 100 100 auto;
+    order: 2;
+    min-height: 25vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .peers {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }

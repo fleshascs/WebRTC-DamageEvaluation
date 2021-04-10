@@ -6,12 +6,12 @@ import Peer from './Peer';
 
 const Peers = ({ peers, activeSpeakerId }) => {
   return (
-    <>
+    <div className={styles.peers}>
       {peers.map((peer) => {
         return (
           <div
             key={peer.id}
-            className={classnames('peer-container', {
+            className={classnames(styles.peerContainer, {
               [styles.activeSpeaker]: peer.id === activeSpeakerId
             })}
           >
@@ -19,7 +19,7 @@ const Peers = ({ peers, activeSpeakerId }) => {
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 

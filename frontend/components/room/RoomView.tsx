@@ -2,7 +2,6 @@ import React, { useContext, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 import utilStyles from '../../styles/utils.module.css';
-import styles from './room.module.css';
 import RoomContext from '../../components/room/RoomContext';
 import {
   getRoom,
@@ -21,13 +20,9 @@ import Sheet from 'react-modal-sheet';
 import * as cookiesManager from '../../helpers/cookiesManager';
 import { ParticipantsList } from './ParticipantsList';
 import { Uploads } from './Uploads';
-import getConfig from 'next/config';
-import { AuthImage } from '../AuthImage';
 import { BottomBar } from './BottomBar';
 import { uploadService } from '../../services';
-const { publicRuntimeConfig } = getConfig();
 import toast from 'react-hot-toast';
-const baseUrl = `${publicRuntimeConfig.apiUrl}/room`;
 
 interface RoomViewProps {
   roomInfo: any;
