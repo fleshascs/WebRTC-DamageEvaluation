@@ -21,7 +21,7 @@ export const TopBar: React.FC<TopBarProps> = (props) => {
   return (
     <div className={styles.container}>
       {backButton ? (
-        <div onClick={router.back}>
+        <div className={styles.icon} onClick={router.back}>
           <BackIcon />
         </div>
       ) : null}
