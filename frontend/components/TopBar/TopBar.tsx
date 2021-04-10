@@ -25,7 +25,7 @@ export const TopBar: React.FC<TopBarProps> = (props) => {
           <BackIcon />
         </div>
       ) : null}
-      <div className={classnames({ [utilStyles.ml2]: backButton })}>{title}</div>
+      <div className={classnames({ [utilStyles.ml1]: backButton })}>{title}</div>
       <div className={styles.buttons}>
         {user ? (
           <a onClick={accountService.logout} className={homeStyles.registerButton}>
