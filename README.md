@@ -17,4 +17,4 @@ try demo app at [webrtc.fleshas.lt](https://webrtc.fleshas.lt)
 
 ### License
 
-React is [MIT licensed](./LICENSE).
+[MIT licensed](./LICENSE).
