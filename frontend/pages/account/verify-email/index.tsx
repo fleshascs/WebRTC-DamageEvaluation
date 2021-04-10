@@ -21,7 +21,7 @@ const VerifyEmail: React.FC = () => {
 
   useEffect(() => {
     const { token } = router.query;
-    if (!token) return;
+    if (!router.isReady) return;
     accountService
       .verifyEmail(token)
       .then(() => {

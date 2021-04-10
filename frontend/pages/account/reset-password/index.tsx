@@ -22,6 +22,7 @@ const ResetPassword: React.FC = () => {
   const [tokenStatus, setTokenStatus] = useState(TokenStatus.Validating);
 
   useEffect(() => {
+    if (!router.isReady) return;
     const { token } = router.query;
     accountService
       .validateResetToken(token)
@@ -32,7 +33,7 @@ const ResetPassword: React.FC = () => {
       .catch(() => {
         setTokenStatus(TokenStatus.Invalid);
       });
-  }, []);
+  }, [router.isReady]);
 
   function getForm() {
     const initialValues = {
