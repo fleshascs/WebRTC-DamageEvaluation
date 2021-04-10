@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { roomService, participantService } from '../../services';
 import { roomsService, uploadService } from '../../services';
-import { Room, Participant } from '../../services/types';
+import { Room, Participant, File } from '../../services/types';
 import { useRouter } from 'next/router';
 
 export const useRoom = (roomId: number): [Room, boolean, boolean] => {
@@ -72,10 +72,10 @@ export const useParticipants = (): Participant[] => {
   return participants;
 };
 
-export const useUploads = (): any[] => {
+export const useUploads = (): File[] => {
   const router = useRouter();
   const roomId = parseInt(router.query.id as string);
-  const [uploads, setUploads] = useState<any>([]);
+  const [uploads, setUploads] = useState<File[]>([]);
 
   const getUploads = useCallback(async (roomId) => {
     const uploads = await uploadService.getAll(roomId);

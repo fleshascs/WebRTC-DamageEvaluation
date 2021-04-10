@@ -18,7 +18,7 @@ export default function Home({ allPostsData }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <TopBar backButton={false} title='home page' />
+      <TopBar backButton={false} title='Damage Evaluation' />
       <div className={classnames(utilStyles.container, utilStyles.center)}>
         {/* <img src="/images/sssss_iphone12black_portrait.png" width="150" /> */}
         <div className={utilStyles.center}>

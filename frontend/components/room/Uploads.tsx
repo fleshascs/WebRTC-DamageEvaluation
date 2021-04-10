@@ -8,7 +8,7 @@ import { AuthImage } from '../AuthImage';
 import { useUploads } from './hooks';
 const { publicRuntimeConfig } = getConfig();
 
-const baseUrl = `${publicRuntimeConfig.apiUrl}/room`;
+const baseUrl = `${publicRuntimeConfig.apiUrl}`;
 
 export const Uploads: React.FC = () => {
   const [isGalleryModalOpen, setGalleryModalOpen] = useState(false);
@@ -40,16 +40,20 @@ export const Uploads: React.FC = () => {
         </span>
         <AuthImage src={galleryModalImageSrc} className={styles.galleryImage} />
       </Modal>
-      <div
-        className={roomStyles.attachment}
-        onClick={() => {
-          setGalleryModalOpen(true);
-          setGalleryModalImageSrc('http://localhost:4443/room/15/uploads/test.png');
-        }}
-      >
-        <AuthImage src='http://localhost:4443/room/15/uploads/test.png' />
-      </div>
-      {uploads ? uploads.map(() => <div className={roomStyles.attachment}></div>) : null}
+
+      {uploads
+        ? uploads.map((file) => (
+            <div
+              className={roomStyles.attachment}
+              onClick={() => {
+                setGalleryModalOpen(true);
+                setGalleryModalImageSrc(baseUrl + file.filePath);
+              }}
+            >
+              <AuthImage src={baseUrl + file.filePath} />
+            </div>
+          ))
+        : null}
     </div>
   );
 };

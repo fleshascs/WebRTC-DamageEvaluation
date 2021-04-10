@@ -14,7 +14,7 @@ router.get('/', authorize(), getAll);
 router.get('/:id', authorize(), getById);
 router.post('/', authorize(), createSchema, create);
 router.post('/:roomId/participants', authorize(), addParticipants);
-router.post('/:roomId/uploads', upload); //authorizeRoom
+router.post('/:roomId/uploads', authorize(), authorizeRoom, upload);
 router.get('/:roomId/participants', authorize(), authorizeRoom, getParticipants);
 router.get('/:roomId/uploads/*', authorize(), authorizeRoom, download);
 router.get('/:roomId/uploads', authorize(), authorizeRoom, getRoomUploads);
@@ -37,10 +37,11 @@ function upload(req, res, next) {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
+  const roomId = req.params.roomId;
   roomService
-    // .upload(req.files, req.user.id, req.params.roomId)
-    .upload(req.files, 0, req.params.roomId)
-    .then(() => res.json({ message: 'file uploaded successfully' }))
+    .upload(req.files, req.params.roomId)
+    .then(({ publicPath }) => roomService.saveUploadToDB(publicPath, req.user.id, roomId))
+    .then((file) => res.json(file))
     .catch(next);
 }
 

@@ -18,3 +18,11 @@ export interface Participant {
   id: number;
   roomId: number;
 }
+
+export interface File {
+  accountId: number;
+  created: string;
+  filePath: string;
+  id: number;
+  roomId: string;
+}

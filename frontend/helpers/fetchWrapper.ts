@@ -8,7 +8,8 @@ export const fetchWrapper = {
   post,
   put,
   delete: _delete,
-  authHeader
+  authHeader,
+  handleResponse
 };
 
 function get(url) {
