@@ -24,7 +24,7 @@ function upload(files, roomId) {
     const sanitizedRoomId = sanitize(roomId);
     const dir = `${uploadDir}/${sanitizedRoomId}`;
     if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+      fs.mkdirSync(dir, { recursive: true });
     }
     uploadPath = `${dir}/${fileName}`;
 
