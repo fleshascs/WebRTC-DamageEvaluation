@@ -9,6 +9,10 @@
   width: 100%;
 }
 
+.homeButton {
+  padding: 13px 11px !important;
+}
+
 .loginButton {
   padding: 8px 11px;
   display: block;
