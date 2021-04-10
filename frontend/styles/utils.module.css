@@ -69,7 +69,9 @@
 .link:hover {
   text-decoration: none;
 }
-
+.ml05 {
+  margin-left: 0.5rem;
+}
 .p1 {
   padding: 1rem;
 }

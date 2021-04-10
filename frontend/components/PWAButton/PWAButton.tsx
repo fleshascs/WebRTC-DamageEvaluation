@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import styles from './button.module.css';
+import utilStyles from '../../styles/utils.module.css';
 
 function getPWADisplayMode() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
@@ -52,7 +53,7 @@ export const PWAButton: React.FC = () => {
           className={styles.icon}
           alt='PWA App'
         />
-        <div>
+        <div className={utilStyles.ml05}>
           <div className={styles.smallText}>Launch now as</div>
           <div className={styles.title}>Web App</div>
         </div>
