@@ -61,7 +61,7 @@ class Me extends React.Component {
         ref={(node) => (this._rootNode = node)}
         data-tip={tip}
         data-tip-disable={!tip}
-        className={styles.myVideoContainer}
+        className={classnames(styles.myVideoContainer, { [styles.hidden]: webcamState !== 'on' })}
       >
         {connected ? (
           <div className='controls'>
