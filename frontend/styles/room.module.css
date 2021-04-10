@@ -27,6 +27,7 @@
   height: 6rem;
   background: #000;
   margin: 5px;
+  overflow: hidden;
 }
 .attachmentsContainer {
   display: flex;

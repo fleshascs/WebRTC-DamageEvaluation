@@ -1,9 +1,10 @@
 import styles from './topbar.module.css';
 import utilStyles from '../../styles/utils.module.css';
+import homeStyles from '../../styles/home.module.css';
+import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { accountService } from '../../services';
-import { useState, useEffect } from 'react';
 import { useUser } from '../auth/hooks';
 
 interface TopBarProps {
@@ -24,13 +25,23 @@ export const TopBar: React.FC<TopBarProps> = (props) => {
           <BackIcon />
         </div>
       ) : null}
-      <div className={utilStyles.ml2}>{title}</div>
-
-      {user ? (
-        <a onClick={accountService.logout} className={styles.logout}>
-          Logout
-        </a>
-      ) : null}
+      <div className={classnames({ [utilStyles.ml2]: backButton })}>{title}</div>
+      <div className={styles.buttons}>
+        {user ? (
+          <a onClick={accountService.logout} className={homeStyles.registerButton}>
+            Logout
+          </a>
+        ) : (
+          <>
+            <Link href={`/login`}>
+              <a className={homeStyles.loginButton}>Sign in</a>
+            </Link>
+            <Link href={`/register`}>
+              <a className={classnames(homeStyles.registerButton, utilStyles.ml1)}>Sign up</a>
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   );
 };

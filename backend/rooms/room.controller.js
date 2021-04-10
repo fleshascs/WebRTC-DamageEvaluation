@@ -7,43 +7,19 @@ const authorizeRoom = require('_middleware/authorizeRoom');
 const Role = require('_helpers/role');
 const roomService = require('./room.service');
 const participantService = require('./roomParticipant.service');
-const uploadService = require('./uploads.service');
+const uploadController = require('./uploads.controller');
 
 // routes
 router.get('/', authorize(), getAll);
 router.get('/:id', authorize(), getById);
 router.post('/', authorize(), createSchema, create);
 router.post('/:roomId/participants', authorize(), addParticipants);
-router.post('/:roomId/uploads', authorize(), authorizeRoom, upload);
+router.post('/:roomId/uploads', authorize(), authorizeRoom, uploadController.upload);
 router.get('/:roomId/participants', authorize(), authorizeRoom, getParticipants);
-router.get('/:roomId/uploads/*', authorize(), authorizeRoom, download);
-router.get('/:roomId/uploads', authorize(), authorizeRoom, getRoomUploads);
+router.get('/:roomId/uploads/*', authorize(), authorizeRoom, uploadController.download);
+router.get('/:roomId/uploads', authorize(), authorizeRoom, uploadController.getRoomUploads);
 
 module.exports = router;
-
-function download(req, res) {
-  const path = req.params[0];
-  res.sendFile(path, { root: `./public/uploads/rooms/${req.params.roomId}` });
-}
-
-function getRoomUploads(req, res, next) {
-  uploadService
-    .getByRoomId(req.params.roomId)
-    .then((images) => res.json(images))
-    .catch(next);
-}
-
-function upload(req, res, next) {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-  const roomId = req.params.roomId;
-  roomService
-    .upload(req.files, req.params.roomId)
-    .then(({ publicPath }) => roomService.saveUploadToDB(publicPath, req.user.id, roomId))
-    .then((file) => res.json(file))
-    .catch(next);
-}
 
 function getById(req, res, next) {
   roomService

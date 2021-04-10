@@ -47,6 +47,11 @@ const Events: React.FC = () => {
         <div className={utilStyles.mt1}></div>
         {isLoading ? 'loading...' : null}
         {failed ? 'failed to load' : null}
+        {!isLoading && !failed && !rooms?.length ? (
+          <div className={classnames(utilStyles.footerText, utilStyles.mt1)}>
+            Event list is empty, create one by yourself or ask administrator to schedule one.
+          </div>
+        ) : null}
         <List>
           {rooms
             ? rooms.map((room, index) => (

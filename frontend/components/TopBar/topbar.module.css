@@ -9,3 +9,9 @@
 .logout {
   margin-left: auto;
 }
+
+.buttons {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
