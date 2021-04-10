@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import Spinner from 'react-spinner';
 import hark from 'hark';
 import Logger from '../../helpers/Logger';
 import { Video } from '../Video';
@@ -89,7 +88,7 @@ export default class PeerView extends React.Component {
         <Video
           ref='videoElem'
           className={classnames({
-            'is-me': isMe,
+            [styles.myVideoElement]: isMe,
             [styles.hidden]: !videoVisible || !videoCanPlay,
             'network-error': videoVisible && videoMultiLayer && consumerCurrentSpatialLayer === null
           })}

@@ -33,7 +33,7 @@ const CreateRoom: React.FC = () => {
       .create(fields)
       .then((room) => {
         setShowVerificationMessage(true);
-        router.push(`/room/${room.id}/addParticipant`);
+        router.replace(`/room/${room.id}/addParticipant`);
       })
       .catch((error) => {
         setSubmitting(false);

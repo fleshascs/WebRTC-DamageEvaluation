@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import ReactTooltip from 'react-tooltip';
 import classnames from 'classnames';
 import * as cookiesManager from '../../helpers/cookiesManager';
-// import * as appPropTypes from './appPropTypes';
 import { withRoomContext } from './RoomContext';
 import * as stateActions from '../../redux/stateActions';
 import PeerView from './PeerView';
+import styles from './room.module.css';
 
 class Me extends React.Component {
   constructor(props) {
@@ -63,6 +61,7 @@ class Me extends React.Component {
         ref={(node) => (this._rootNode = node)}
         data-tip={tip}
         data-tip-disable={!tip}
+        className={styles.myVideoContainer}
       >
         {connected ? (
           <div className='controls'>

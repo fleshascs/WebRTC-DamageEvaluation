@@ -1,6 +1,8 @@
-import { forwardRef } from "react";
-import styles from "./video.module.css";
+import { forwardRef } from 'react';
 
-export const Video = forwardRef<HTMLVideoElement>((_props, ref) => {
-  return <video className={styles.video} ref={ref} />;
-});
+export const Video = forwardRef<HTMLVideoElement, React.HTMLProps<HTMLVideoElement>>(
+  (props, ref) => {
+    const { className, ...rest } = props;
+    return <video className={className} {...rest} ref={ref} />;
+  }
+);
