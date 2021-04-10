@@ -87,7 +87,11 @@ export const RoomView: React.FC<RoomViewProps> = (props) => {
         webcamState={webcamState}
         setParticipantsOpen={setParticipantsOpen}
       />
-
+      {!peersCount ? (
+        <div className={classnames(utilStyles.p1, utilStyles.footerText)}>
+          There is no participants in the room, wait for people to join...
+        </div>
+      ) : null}
       <Peers />
       <Me />
       <div style={{ height: '66px' }} />
