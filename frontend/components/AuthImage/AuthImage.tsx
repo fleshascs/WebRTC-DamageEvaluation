@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchWrapper } from '../../helpers';
 
-interface AuthImageProps extends React.ButtonHTMLAttributes<HTMLImageElement> {
+interface AuthImageProps extends React.HTMLAttributes<HTMLImageElement> {
   src: string;
 }
 
@@ -12,14 +12,12 @@ export const AuthImage: React.FC<AuthImageProps> = (props) => {
 
   useEffect(() => {
     if (!src) return;
-
     fetch(src, {
       method: 'GET',
       headers: fetchWrapper.authHeader(src)
     })
       .then((response) => response.blob())
-      .then(convertBlobToBase64)
-      .then((base64) => setImgSrc(base64 as string));
+      .then((blob) => setImgSrc(URL.createObjectURL(blob)));
   }, []);
 
   const imageStyle = !loaded ? { display: 'none' } : {};
@@ -34,13 +32,3 @@ export const AuthImage: React.FC<AuthImageProps> = (props) => {
     />
   );
 };
-
-const convertBlobToBase64 = (blob: Blob): Promise<FileReader['result']> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-  });

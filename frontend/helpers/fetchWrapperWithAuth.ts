@@ -3,7 +3,7 @@ import { fetchWrapper } from './fetchWrapper';
 
 function createWrapper(fn) {
   return function fetchWithAuth<T>(...args) {
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<T>((resolve) => {
       const subscription = accountService.status.subscribe((status) => {
         if (status !== UserState.UNDEFINED) callFn();
       });
