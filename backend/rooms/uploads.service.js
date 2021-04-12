@@ -1,4 +1,4 @@
-﻿const db = require('_helpers/db');
+﻿const db = require('../_helpers/db');
 const path = require('path');
 const sanitize = require('sanitize-filename');
 const { v4: uuidv4 } = require('uuid');

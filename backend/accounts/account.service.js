@@ -1,11 +1,11 @@
-﻿const config = require('config.json');
-const jwt = require('jsonwebtoken');
+﻿const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const { Op, QueryTypes } = require('sequelize');
-const sendEmail = require('_helpers/send-email');
-const db = require('_helpers/db');
-const Role = require('_helpers/role');
+const db = require('../_helpers/db');
+const Role = require('../_helpers/role');
+const config = require('../config.json');
+const sendEmail = require('../_helpers/send-email');
 
 module.exports = {
   authenticate,

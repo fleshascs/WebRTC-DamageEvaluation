@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = model;
 
@@ -18,15 +18,15 @@ function model(sequelize) {
     created: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: DataTypes.NOW
     },
     updated: { type: DataTypes.DATE },
     isVerified: {
       type: DataTypes.VIRTUAL,
       get() {
         return !!(this.verified || this.passwordReset);
-      },
-    },
+      }
+    }
   };
 
   const options = {
@@ -34,13 +34,13 @@ function model(sequelize) {
     timestamps: false,
     defaultScope: {
       // exclude password hash by default
-      attributes: { exclude: ["passwordHash"] },
+      attributes: { exclude: ['passwordHash'] }
     },
     scopes: {
       // include hash with this scope
-      withHash: { attributes: {} },
-    },
+      withHash: { attributes: {} }
+    }
   };
 
-  return sequelize.define("account", attributes, options);
+  return sequelize.define('account', attributes, options);
 }

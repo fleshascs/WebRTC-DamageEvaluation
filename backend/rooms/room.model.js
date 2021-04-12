@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = model;
 
@@ -10,14 +10,14 @@ function model(sequelize) {
     created: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+      defaultValue: DataTypes.NOW
+    }
   };
 
   const options = {
     // disable default timestamp fields (createdAt and updatedAt)
-    timestamps: false,
+    timestamps: false
   };
 
-  return sequelize.define("room", attributes, options);
+  return sequelize.define('room', attributes, options);
 }

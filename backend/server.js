@@ -22,7 +22,7 @@ const cors = require('cors');
 const { AwaitQueue } = require('awaitqueue');
 const Logger = require('./lib/Logger');
 const Room = require('./lib/Room');
-const errorHandler = require('_middleware/error-handler');
+const errorHandler = require('./_middleware/error-handler');
 const interactiveServer = require('./lib/interactiveServer');
 const interactiveClient = require('./lib/interactiveClient');
 const fileUpload = require('express-fileupload');
@@ -363,7 +363,7 @@ async function createExpressApp() {
   );
 
   // swagger docs route
-  expressApp.use('/api-docs', require('_helpers/swagger'));
+  expressApp.use('/api-docs', require('./_helpers/swagger'));
 
   /**
    * Error handler.
