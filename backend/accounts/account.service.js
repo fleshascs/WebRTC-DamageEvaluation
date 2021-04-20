@@ -82,11 +82,6 @@ async function revokeToken({ token, ipAddress }) {
 async function register(params, origin) {
   // validate
   if (await db.Account.findOne({ where: { email: params.email } })) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('already registered');
-      return;
-    }
-
     // send already registered error in email to prevent account enumeration
     return await sendAlreadyRegisteredEmail(params.email, origin);
   }
@@ -105,10 +100,6 @@ async function register(params, origin) {
   // save account
   await account.save();
 
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`${origin}/account/verify-email?token=${account.verificationToken}`);
-    return;
-  }
   // send email
   await sendVerificationEmail(account, origin);
 }
@@ -164,27 +155,6 @@ async function resetPassword({ token, password }) {
 }
 
 async function getAll(roomId, query) {
-  // const options = query
-  //   ? {
-  //       where: {
-  //         firstName: {
-  //           [Op.like]: `%${query}%`,
-  //         },
-  //       },
-  //       include: [
-  //         {
-  //           model: db.RoomParticipant,
-  //           where: {
-  //             roomId: 1,
-  //             accountId: 1,
-  //           },
-  //           required: false,
-  //         },
-  //       ],
-  //     }
-  //   : null;
-  // const accounts = await db.Account.findAll(options);
-
   const accounts = await db.sequelize.query(
     'SELECT id, firstName, lastName, (select count(*) from roomParticipants where accountId = ac.id and roomId = ?) as inRoom FROM accounts ac WHERE firstName like ?',
     {
@@ -194,7 +164,6 @@ async function getAll(roomId, query) {
   );
 
   return accounts;
-  // return accounts.map((x) => basicDetails(x));
 }
 
 async function getById(id) {
