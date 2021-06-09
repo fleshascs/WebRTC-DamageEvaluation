@@ -41,7 +41,7 @@ const VerifyEmail: React.FC = () => {
         return (
           <div>
             Verification failed, you can also verify your account using the{' '}
-            <Link href='/forgot-password'>
+            <Link href='/account/forgot-password'>
               <a>forgot password</a>
             </Link>{' '}
             page.
