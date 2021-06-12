@@ -1,0 +1,15 @@
+name: frontend:frontend-ci
+
+on: [push]
+
+jobs:
+  test:
+    name: frontend-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+      - run: cd frontend && npm ci 
+      - run: cd frontend && npm run build
